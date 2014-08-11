@@ -37,8 +37,10 @@ MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint&
     SetZoom(-10);
     SetUseHorizontalScrollBar(false);
 
+    wxColor color = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
+
     MarkerDeleteAll(GetOurMarkerNumber());
-    MarkerSetBackground(GetOurMarkerNumber(), *wxLIGHT_GREY);
+    MarkerSetBackground(GetOurMarkerNumber(), color);
     const int alpha = 100;
     MarkerSetAlpha(GetOurMarkerNumber(), alpha);
 
@@ -60,13 +62,6 @@ MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint&
 #ifndef wxHAVE_RAW_BITMAP
     IndicatorSetUnder(thePermIndicator,true);
 #endif
-//
-//    const int theSpellIndicator = 11;
-//    IndicatorSetStyle(theSpellIndicator, wxSCI_INDIC_SQUIGGLE);
-//    IndicatorSetForeground(theSpellIndicator, wxColour(255,0,0) );
-//#ifndef wxHAVE_RAW_BITMAP
-//    IndicatorSetUnder(theSpellIndicator,true);
-//#endif
 
     const int theFindFoudIndicator = 21;
     IndicatorSetStyle(theFindFoudIndicator, wxSCI_INDIC_HIGHLIGHT);
@@ -81,13 +76,6 @@ MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint&
 #ifndef wxHAVE_RAW_BITMAP
     IndicatorSetUnder(theFindHighlightIndicator,true);
 #endif
-
-//    const int theBraceHighlighter = 20;
-//    IndicatorSetForeground(theBraceHighlighter, wxColour(80, 236, 120));
-//    IndicatorSetStyle(theBraceHighlighter, wxSCI_INDIC_HIGHLIGHT);
-//#ifndef wxHAVE_RAW_BITMAP
-//    IndicatorSetUnder(theBraceHighlighter, true);
-//#endif
 
 }
 
@@ -158,14 +146,15 @@ void MiniStyledTextCtrl::SetVisibleRange(int from, int length, bool force)
 }
 void MiniStyledTextCtrl::MakeVisible(int from, int length)
 {
+// TODO (DAN#1#): Check configuration if needed to follow
     ScrollToLine(from - (LinesOnScreen()-length)/2);
 }
 void MiniStyledTextCtrl::SetMarker()
 {
     Freeze();
     MarkerDeleteAll(GetOurMarkerNumber());
-    for (int l = visibleFrom; l < visibleFrom+visibleLength ; ++l)
-        MarkerAdd(l, GetOurMarkerNumber());
+        for (int l = visibleFrom; l < visibleFrom+visibleLength ; ++l)
+            MarkerAdd(l, GetOurMarkerNumber());
     Thaw();
 }
 void MiniStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc, bool force)
