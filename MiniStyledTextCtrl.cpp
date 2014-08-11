@@ -20,9 +20,9 @@ BEGIN_EVENT_TABLE(MiniStyledTextCtrl, cbStyledTextCtrl)
     EVT_MIDDLE_UP       (MiniStyledTextCtrl::OnMouseUpOrDown)
     EVT_RIGHT_UP        (MiniStyledTextCtrl::OnMouseUpOrDown)
     EVT_MOTION          (MiniStyledTextCtrl::OnMouseMove)
-//    EVT_LEFT_DCLICK
-//    EVT_MIDDLE_DCLICK
-//    EVT_RIGHT_DCLICK
+    EVT_LEFT_DCLICK     (MiniStyledTextCtrl::OnMouseDClick)
+    EVT_MIDDLE_DCLICK   (MiniStyledTextCtrl::OnMouseDClick)
+    EVT_RIGHT_DCLICK    (MiniStyledTextCtrl::OnMouseDClick)
     EVT_PAINT           (MiniStyledTextCtrl::OnPaint)
     EVT_ERASE_BACKGROUND(MiniStyledTextCtrl::OnEraseBackground)
 END_EVENT_TABLE()
@@ -95,6 +95,10 @@ void MiniStyledTextCtrl::OnMousWheel(wxMouseEvent& event)
 {   //disable zoom changes
     event.Skip(!event.m_controlDown);
 }
+void MiniStyledTextCtrl::OnMouseDClick(wxMouseEvent& event)
+{   // disable text selection on double click
+    event.Skip(false);
+}
 void MiniStyledTextCtrl::OnMouseUpOrDown(wxMouseEvent& event)
 {
     if( event.ButtonDown(wxMOUSE_BTN_LEFT) )
@@ -148,17 +152,25 @@ void MiniStyledTextCtrl::SetVisibleRange(int from, int length, bool force)
         MakeVisible(from, length);
     }
 }
+void MiniStyledTextCtrl::UpdateBackground()
+{
+    SetMarker();
+}
 void MiniStyledTextCtrl::MakeVisible(int from, int length)
 {
-// TODO (danselmi#1#): Check configuration if needed to follow
-    ScrollToLine(from - (LinesOnScreen()-length)/2);
+    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+    bool doscroll = cfg->ReadBool(_T("/mini_doc/sync_to_main_doc"), true);
+    if (doscroll)
+        ScrollToLine(from - (LinesOnScreen()-length)/2);
 }
 void MiniStyledTextCtrl::SetMarker()
 {
-// TODO (danselmi#1#): Check configuration if we should mark the visible or the non-visible area
-    bool inverse = false;
+    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+    bool inverse = cfg->ReadBool(_T("/mini_doc/inverse_designator"), false);
     Freeze();
+    wxColor color = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
     MarkerDeleteAll(GetOurMarkerNumber());
+    MarkerSetBackground(GetOurMarkerNumber(), color);
     if (inverse)
     {
         for (int l = visibleFrom; l < visibleFrom+visibleLength ; ++l)

@@ -90,15 +90,24 @@
 		</VirtualTargets>
 		<Unit filename="MiniDoc.cpp" />
 		<Unit filename="MiniDoc.h" />
+		<Unit filename="MiniDocConfigPanel.cpp" />
+		<Unit filename="MiniDocConfigPanel.h" />
 		<Unit filename="MiniDocPanel.cpp" />
 		<Unit filename="MiniDocPanel.h" />
 		<Unit filename="MiniStyledTextCtrl.cpp" />
 		<Unit filename="MiniStyledTextCtrl.h" />
 		<Unit filename="manifest.xml" />
+		<Unit filename="wxsmith/MiniDocConfigPanel.wxs" />
 		<Extensions>
 			<code_completion />
 			<envvars />
 			<debugger />
+			<wxsmith version="1">
+				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
+				<resources>
+					<wxPanel wxs="wxsmith/MiniDocConfigPanel.wxs" src="MiniDocConfigPanel.cpp" hdr="MiniDocConfigPanel.h" xrc="MiniDocConfigPanel.xrc" fwddecl="1" i18n="1" name="MiniDocConfigPanel" language="CPP" />
+				</resources>
+			</wxsmith>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

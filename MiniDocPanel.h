@@ -24,6 +24,7 @@ class MiniDocPanel: public wxPanel
 
         void ShowMiniatureOf(EditorBase *eb = NULL);
         void UpdateMiniStc(EditorBase *eb, bool force=false);
+        void UpdateMiniStcBackground();
 
     protected:
         void OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event);

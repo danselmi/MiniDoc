@@ -7,6 +7,7 @@
 
 #include "MiniDoc.h"
 #include "MiniDocPanel.h"
+#include "MiniDocConfigPanel.h"
 
 // Register the plugin with Code::Blocks.
 // We are using an anonymous namespace so we don't litter the global one.
@@ -63,9 +64,7 @@ void MiniDoc::OnAttach()
     m_FunctorId = EditorHooks::RegisterHook( editor_hook );
 
 
-
-
-    // add the foldpanel to the docking system
+    // add the MiniDoc-panel to the docking system
     CodeBlocksDockEvent dockevt(cbEVT_ADD_DOCK_WINDOW);
     dockevt.name = _T("MiniDoc");
     dockevt.title = _("MiniDoc");
@@ -201,4 +200,10 @@ void MiniDoc::OnUpdateViewMenu(wxUpdateUIEvent &event)
     }
     // must do...
     event.Skip();
+}
+
+
+cbConfigurationPanel* MiniDoc::GetConfigurationPanel(wxWindow* parent)
+{
+    return new MiniDocConfigPanel(parent, m_pPanel);
 }

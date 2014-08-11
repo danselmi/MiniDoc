@@ -12,7 +12,7 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         virtual ~MiniStyledTextCtrl();
 
         void UpdateMiniature(cbStyledTextCtrl *stc, bool force = false);
-
+        void UpdateBackground();
     protected:
     private:
         void SetMarker();
@@ -24,6 +24,7 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         void OnKey(wxKeyEvent& event);
         void OnMousWheel(wxMouseEvent& event);
         void OnMouseUpOrDown(wxMouseEvent& event);
+        void OnMouseDClick(wxMouseEvent& event);
         void OnMouseMove(wxMouseEvent& event);
         void OnMouseEnterOrLeave(wxMouseEvent& event);
 

@@ -20,6 +20,7 @@
 #include <cbplugin.h> // for "class cbPlugin"
 
 class MiniDocPanel;
+class MiniDocConfigPanel;
 class wxMenu;
 
 
@@ -36,8 +37,8 @@ class MiniDoc : public cbPlugin
         /** Invoke configuration dialog. */
         virtual int Configure();
         virtual int GetConfigurationPriority() const { return 50; }
-        virtual int GetConfigurationGroup() const { return cgUnknown; }
-        virtual cbConfigurationPanel* GetConfigurationPanel(wxWindow* parent){ return 0; }
+        virtual int GetConfigurationGroup() const { return cgEditor; }
+        virtual cbConfigurationPanel* GetConfigurationPanel(wxWindow* parent);
         virtual cbConfigurationPanel* GetProjectConfigurationPanel(wxWindow* parent, cbProject* project){ return 0; }
         virtual void BuildMenu(wxMenuBar* menuBar);
 
