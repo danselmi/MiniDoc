@@ -151,7 +151,14 @@ void MiniStyledTextCtrl::SetVisibleRange(int from, int length, bool force)
     visibleLength = length;
 
     if (force || (oldVisibleFrom != visibleFrom) || (oldVisibleLength != visibleLength))
+    {
         SetMarker();
+        MakeVisible(from, length);
+    }
+}
+void MiniStyledTextCtrl::MakeVisible(int from, int length)
+{
+    ScrollToLine(from - (LinesOnScreen()-length)/2);
 }
 void MiniStyledTextCtrl::SetMarker()
 {

@@ -131,7 +131,8 @@ void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)
         m_pPanel->UpdateMiniStc(editor);
 //    else if(event.GetEventType() == wxEVT_SCI_MODIFIED)
 //    {
-//        m_pPanel->UpdateMiniStc(editor, true);
+//        if ( event.GetModificationType() & wxSCI_MOD_CHANGEFOLD)
+//            m_pPanel->UpdateMiniStc(editor, true);
 //    }
 }
 int MiniDoc::Configure()

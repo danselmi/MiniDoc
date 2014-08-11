@@ -17,6 +17,7 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
     private:
         void SetMarker();
         void SetVisibleRange(int from, int to, bool force = false);
+        void MakeVisible(int fromLine, int length);
 
         void SyncFoldState(cbStyledTextCtrl *stc);
 
