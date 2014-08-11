@@ -34,7 +34,7 @@ MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint&
     SetMargins(0,0);
     for (unsigned int i = 0 ; i < wxSCI_MAX_MARGIN ; ++i)
         SetMarginWidth(i,0);
-    SetZoom(-10);
+    SetZoom(-10); // smallest allowed zoom factor
     SetUseHorizontalScrollBar(false);
 
     wxColor color = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
@@ -146,12 +146,12 @@ void MiniStyledTextCtrl::SetVisibleRange(int from, int length, bool force)
 }
 void MiniStyledTextCtrl::MakeVisible(int from, int length)
 {
-// TODO (DAN#1#): Check configuration if needed to follow
+// TODO (danselmi#1#): Check configuration if needed to follow
     ScrollToLine(from - (LinesOnScreen()-length)/2);
 }
 void MiniStyledTextCtrl::SetMarker()
 {
-// TODO (DAN#1#): Check configuration if we should mark the visible or the non-visible area
+// TODO (danselmi#1#): Check configuration if we should mark the visible or the non-visible area
     bool inverse = false;
     Freeze();
     MarkerDeleteAll(GetOurMarkerNumber());
@@ -182,7 +182,7 @@ void MiniStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc, bool force)
 }
 void MiniStyledTextCtrl::SyncFoldState(cbStyledTextCtrl *stc)
 {
-    /// should we do syn the folding into the miniature?
+    /// should we do sync the folding into the miniature?
 }
 const int MiniStyledTextCtrl::GetOurMarkerNumber()const
 {

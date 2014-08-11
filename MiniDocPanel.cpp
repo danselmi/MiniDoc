@@ -36,7 +36,6 @@ MiniDocPanel::MiniDocPanel(wxWindow* parent,wxWindowID id)
     SetSizer(boxSizer);
     boxSizer->Fit(this);
     boxSizer->SetSizeHints(this);
-
 }
 
 MiniDocPanel::~MiniDocPanel()
@@ -63,6 +62,8 @@ void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
         miniStc_->SetDocPointer(ed->GetControl()->GetDocPointer());
         EditorColourSet *ecs = Manager::Get()->GetEditorManager()->GetColourSet();
         ecs->Apply(ed->GetLanguage(), miniStc_);
+//        for (unsigned int style = 0 ; style <= wxSCI_STYLE_MAX ; ++style)
+//            miniStc_->StyleSetSize(style, 3);
         miniStc_->UpdateMiniature(ed->GetControl(),true);
     }
     else
@@ -114,9 +115,26 @@ void MiniDocPanel::OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event)
         {
             cbStyledTextCtrl *stc = ed->GetControl();
             if (stc)
-                stc->ScrollToLine(line);
+            {
+
+                int k = 0; //no adjustment, selected line on top
+                    k = 3; //selected line 1/3 into screen
+                    k = 4; //selected line 1/4 into screen
+                    k = 2; //selected line on center
+                switch (k)
+                {
+                case 4:
+                case 3:
+                case 2:
+                    stc->ScrollToLine(line - stc->LinesOnScreen()/k);
+                    break;
+                case 0:
+                default:
+                    stc->ScrollToLine(line);
+                }
+
+            }
         }
     }
-
 }
 
