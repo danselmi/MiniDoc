@@ -105,6 +105,10 @@ void MiniStyledTextCtrl::OnMouseUpOrDown(wxMouseEvent& event)
         evt.SetLine(line);
         wxPostEvent(this, evt);
     }
+    if ( event.ButtonDown(wxMOUSE_BTN_RIGHT) )
+    {
+        SetFocus();
+    }
     event.Skip(false);
 }
 void MiniStyledTextCtrl::OnMouseMove(wxMouseEvent& event)
