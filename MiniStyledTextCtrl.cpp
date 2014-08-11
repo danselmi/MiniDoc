@@ -151,10 +151,22 @@ void MiniStyledTextCtrl::MakeVisible(int from, int length)
 }
 void MiniStyledTextCtrl::SetMarker()
 {
+// TODO (DAN#1#): Check configuration if we should mark the visible or the non-visible area
+    bool inverse = false;
     Freeze();
     MarkerDeleteAll(GetOurMarkerNumber());
+    if (inverse)
+    {
         for (int l = visibleFrom; l < visibleFrom+visibleLength ; ++l)
             MarkerAdd(l, GetOurMarkerNumber());
+    }
+    else
+    {
+        for (int l = 0; l < visibleFrom ; ++l)
+            MarkerAdd(l, GetOurMarkerNumber());
+        for (int l = visibleFrom+visibleLength; l < GetLineCount() ; ++l)
+            MarkerAdd(l, GetOurMarkerNumber());
+    }
     Thaw();
 }
 void MiniStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc, bool force)
