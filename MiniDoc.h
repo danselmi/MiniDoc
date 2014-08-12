@@ -54,6 +54,7 @@ class MiniDoc : public cbPlugin
         void OnEditorOpen(CodeBlocksEvent& event);
         void OnEditorActivated(CodeBlocksEvent& event);
         void OnEditorDeactivated(CodeBlocksEvent& event);
+        void OnResize(wxSizeEvent& event);
 
         void OnViewMiniDocPanel(wxCommandEvent& event);
         void OnUpdateViewMenu(wxUpdateUIEvent &event);

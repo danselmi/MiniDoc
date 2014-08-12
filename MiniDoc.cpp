@@ -109,12 +109,27 @@ void MiniDoc::OnEditorOpen(CodeBlocksEvent& event)
 void MiniDoc::OnEditorActivated(CodeBlocksEvent& event)
 {
     if (m_pPanel && IsAttached())
+    {
         m_pPanel->ShowMiniatureOf(event.GetEditor());
+        if (event.GetEditor()->IsBuiltinEditor())
+            static_cast<cbEditor*>(event.GetEditor())->GetLeftSplitViewControl()->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize),nullptr, this);
+    }
 }
 void MiniDoc::OnEditorDeactivated(CodeBlocksEvent& event)
 {
     if (m_pPanel && IsAttached())
+    {
+        if (event.GetEditor()->IsBuiltinEditor())
+            static_cast<cbEditor*>(event.GetEditor())->GetLeftSplitViewControl()->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize),nullptr, this);
         m_pPanel->ShowMiniatureOf(NULL);
+    }
+}
+
+void MiniDoc::OnResize(wxSizeEvent& event)
+{
+    cbStyledTextCtrl *stc = (cbStyledTextCtrl*)event.GetEventObject();
+    m_pPanel->UpdateMiniStc(stc);
+    event.Skip();
 }
 
 void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)

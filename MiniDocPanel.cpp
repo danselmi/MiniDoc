@@ -58,6 +58,14 @@ void MiniDocPanel::UpdateMiniStc(EditorBase *eb, bool force)
         return;
     miniStc_->UpdateMiniature(stc, force);
 }
+
+void MiniDocPanel::UpdateMiniStc(cbStyledTextCtrl *stc, bool force)
+{
+    if(!stc)
+        return;
+    miniStc_->UpdateMiniature(stc, force);
+}
+
 void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
 {
     if(ed)
