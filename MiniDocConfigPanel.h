@@ -6,6 +6,7 @@
 class wxCheckBox;
 class wxStaticText;
 class wxButton;
+class wxChoice;
 //*)
 
 #include <configurationpanel.h>
@@ -20,10 +21,12 @@ class MiniDocConfigPanel: public cbConfigurationPanel
 		virtual ~MiniDocConfigPanel();
 
 		//(*Declarations(MiniDocConfigPanel)
+		wxStaticText* StaticText2;
 		wxButton* ColorSelButton;
 		wxCheckBox* CheckBox2;
 		wxStaticText* StaticText1;
 		wxCheckBox* CheckBox1;
+		wxChoice* Choice1;
 		//*)
 
         /// @return the panel's title.

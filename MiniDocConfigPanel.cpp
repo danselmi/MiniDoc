@@ -23,6 +23,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/button.h>
 //*)
 
@@ -48,6 +49,8 @@ void MiniDocConfigPanel::BuildContent(wxWindow* parent)
 	ColorSelButton = (wxButton*)FindWindow(XRCID("ID_BUTTON1"));
 	CheckBox1 = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX1"));
 	CheckBox2 = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX2"));
+	StaticText2 = (wxStaticText*)FindWindow(XRCID("ID_STATICTEXT2"));
+	Choice1 = (wxChoice*)FindWindow(XRCID("ID_CHOICE1"));
 
 	Connect(XRCID("ID_BUTTON1"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MiniDocConfigPanel::OnColorSelButtonClick);
 	//*)
@@ -58,10 +61,12 @@ void MiniDocConfigPanel::BuildContent(wxWindow* parent)
 
 
     wxColour backgroundColour = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
-    XRCCTRL(*this, "ID_BUTTON1", wxButton)->SetBackgroundColour(backgroundColour);
+    ColorSelButton->SetBackgroundColour(backgroundColour);
 
-	XRCCTRL(*this, "ID_CHECKBOX1", wxCheckBox)->SetValue(cfg->ReadBool(_T("/mini_doc/sync_to_main_doc"), true));
-	XRCCTRL(*this, "ID_CHECKBOX2", wxCheckBox)->SetValue(cfg->ReadBool(_T("/mini_doc/inverse_designator"), false));
+	CheckBox1->SetValue(cfg->ReadBool(_T("/mini_doc/sync_to_main_doc"), true));
+	CheckBox2->SetValue(cfg->ReadBool(_T("/mini_doc/inverse_designator"), false));
+	Choice1->SetSelection(cfg->ReadInt(_T("mini_doc/pos_of_main"), 2));
+
 }
 
 MiniDocConfigPanel::~MiniDocConfigPanel()
@@ -98,6 +103,7 @@ void MiniDocConfigPanel::OnApply()
 
     cfg->Write(_T("/mini_doc/sync_to_main_doc"), XRCCTRL(*this, "ID_CHECKBOX1", wxCheckBox)->GetValue());
     cfg->Write(_T("/mini_doc/inverse_designator"), XRCCTRL(*this, "ID_CHECKBOX2", wxCheckBox)->GetValue());
+    cfg->Write(_T("mini_doc/pos_of_main"), Choice1->GetSelection());
     panel_->UpdateMiniStcBackground();
 }
 

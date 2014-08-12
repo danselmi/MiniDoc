@@ -8,5 +8,7 @@
 		</object>
 		<object name="ID_CHECKBOX1" class="wxCheckBox" variable="CheckBox1" member="yes" />
 		<object name="ID_CHECKBOX2" class="wxCheckBox" variable="CheckBox2" member="yes" />
+		<object name="ID_STATICTEXT2" class="wxStaticText" variable="StaticText2" member="yes" />
+		<object name="ID_CHOICE1" class="wxChoice" variable="Choice1" member="yes" />
 	</resource_extra>
 </wxsmith>

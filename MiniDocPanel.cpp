@@ -119,11 +119,14 @@ void MiniDocPanel::OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event)
             cbStyledTextCtrl *stc = ed->GetControl();
             if (stc)
             {
-
-                int k = 0; //no adjustment, selected line on top
+                ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+                int k;
+                    /*k = 0; //no adjustment of position
                     k = 3; //selected line 1/3 into screen
                     k = 4; //selected line 1/4 into screen
                     k = 2; //selected line on center
+                    k = 1; //selected line on top*/
+                k = cfg->ReadInt(_T("mini_doc/pos_of_main"), 2);
                 switch (k)
                 {
                 case 4:
@@ -131,9 +134,12 @@ void MiniDocPanel::OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event)
                 case 2:
                     stc->ScrollToLine(line - stc->LinesOnScreen()/k);
                     break;
+                case 1:
+                    stc->ScrollToLine(line);
+                    break;
                 case 0:
                 default:
-                    stc->ScrollToLine(line);
+                    break;
                 }
 
             }
