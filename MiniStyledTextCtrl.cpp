@@ -71,10 +71,16 @@ MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint&
 void MiniStyledTextCtrl::Init()
 {
     ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+
     SetMargins(0,0);
     for (unsigned int i = 0 ; i < wxSCI_MAX_MARGIN ; ++i)
         SetMarginWidth(i,0);
+
     SetZoom(-10); // smallest allowed zoom factor
+//    StyleSetSize(wxSCI_STYLE_DEFAULT, 2);
+//    for (unsigned int style = 0 ; style < wxSCI_STYLE_MAX ; ++style)
+//        StyleSetSize(style, 2);
+
     SetUseHorizontalScrollBar(false);
 
     bool showVertScrollbar = cfg->ReadBool(_T("/mini_doc/show_vertical_scrollbar"), true);
