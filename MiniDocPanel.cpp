@@ -41,9 +41,9 @@ MiniDocPanel::MiniDocPanel(wxWindow* parent,wxWindowID id)
 MiniDocPanel::~MiniDocPanel()
 {
 }
-void MiniDocPanel::UpdateMiniStcBackground()
+void MiniDocPanel::UpdateMiniStcConfig()
 {
-    miniStc_->UpdateBackground();
+    miniStc_->UpdateConfig();
 }
 void MiniDocPanel::UpdateMiniStc(EditorBase *eb, bool force)
 {

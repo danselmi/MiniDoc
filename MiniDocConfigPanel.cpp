@@ -49,6 +49,7 @@ void MiniDocConfigPanel::BuildContent(wxWindow* parent)
 	ColorSelButton = (wxButton*)FindWindow(XRCID("ID_BUTTON1"));
 	CheckBox1 = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX1"));
 	CheckBox2 = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX2"));
+	CheckBox3 = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX3"));
 	StaticText2 = (wxStaticText*)FindWindow(XRCID("ID_STATICTEXT2"));
 	Choice1 = (wxChoice*)FindWindow(XRCID("ID_CHOICE1"));
 
@@ -65,6 +66,7 @@ void MiniDocConfigPanel::BuildContent(wxWindow* parent)
 
 	CheckBox1->SetValue(cfg->ReadBool(_T("/mini_doc/sync_to_main_doc"), true));
 	CheckBox2->SetValue(cfg->ReadBool(_T("/mini_doc/inverse_designator"), false));
+	CheckBox3->SetValue(cfg->ReadBool(_T("/mini_doc/show_vertical_scrollbar"), true));
 	Choice1->SetSelection(cfg->ReadInt(_T("mini_doc/pos_of_main"), 2));
 
 }
@@ -101,10 +103,11 @@ void MiniDocConfigPanel::OnApply()
     Manager::Get()->GetColourManager()->SetColour(wxT("minidoc_background"), backgroundColour);
 
 
-    cfg->Write(_T("/mini_doc/sync_to_main_doc"), XRCCTRL(*this, "ID_CHECKBOX1", wxCheckBox)->GetValue());
-    cfg->Write(_T("/mini_doc/inverse_designator"), XRCCTRL(*this, "ID_CHECKBOX2", wxCheckBox)->GetValue());
+    cfg->Write(_T("/mini_doc/sync_to_main_doc"), CheckBox1->GetValue());
+    cfg->Write(_T("/mini_doc/inverse_designator"), CheckBox2->GetValue());
+    cfg->Write(_T("/mini_doc/show_vertical_scrollbar"), CheckBox3->GetValue());
     cfg->Write(_T("mini_doc/pos_of_main"), Choice1->GetSelection());
-    panel_->UpdateMiniStcBackground();
+    panel_->UpdateMiniStcConfig();
 }
 
 void MiniDocConfigPanel::OnCancel()

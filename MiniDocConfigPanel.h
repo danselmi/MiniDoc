@@ -23,6 +23,7 @@ class MiniDocConfigPanel: public cbConfigurationPanel
 		//(*Declarations(MiniDocConfigPanel)
 		wxStaticText* StaticText2;
 		wxButton* ColorSelButton;
+		wxCheckBox* CheckBox3;
 		wxCheckBox* CheckBox2;
 		wxStaticText* StaticText1;
 		wxCheckBox* CheckBox1;

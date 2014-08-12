@@ -31,30 +31,19 @@ END_EVENT_TABLE()
 MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint& pos, const wxSize& size, long style):
     cbStyledTextCtrl(pParent, id, pos, size, style)
 {
-    SetMargins(0,0);
-    for (unsigned int i = 0 ; i < wxSCI_MAX_MARGIN ; ++i)
-        SetMarginWidth(i,0);
-    SetZoom(-10); // smallest allowed zoom factor
-    SetUseHorizontalScrollBar(false);
+    Init();
 
-    wxColor color = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
-
-    MarkerDeleteAll(GetOurMarkerNumber());
-    MarkerSetBackground(GetOurMarkerNumber(), color);
-    const int alpha = 100;
-    MarkerSetAlpha(GetOurMarkerNumber(), alpha);
-
-
-    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));// check if the feature is enabled
-    //if (cfg->ReadBool(_T("/highlight_occurrence/enabled"), true)){
-    const int theIndicator = 10;
-    wxColour highlightColour(Manager::Get()->GetColourManager()->GetColour(wxT("editor_highlight_occurrence")));
-    IndicatorSetStyle(theIndicator, wxSCI_INDIC_HIGHLIGHT);
-    IndicatorSetForeground(theIndicator, highlightColour );
+    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+    if (cfg->ReadBool(_T("/highlight_occurrence/enabled"), true))
+    {
+        const int theIndicator = 10;
+        wxColour highlightColour(Manager::Get()->GetColourManager()->GetColour(wxT("editor_highlight_occurrence")));
+        IndicatorSetStyle(theIndicator, wxSCI_INDIC_HIGHLIGHT);
+        IndicatorSetForeground(theIndicator, highlightColour );
 #ifndef wxHAVE_RAW_BITMAP
-    IndicatorSetUnder(theIndicator,true);
+        IndicatorSetUnder(theIndicator,true);
 #endif
-    //}
+    }
 
     const int thePermIndicator = 12;
     IndicatorSetStyle(thePermIndicator, wxSCI_INDIC_HIGHLIGHT);
@@ -79,7 +68,25 @@ MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint&
 
 }
 
+void MiniStyledTextCtrl::Init()
+{
+    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+    SetMargins(0,0);
+    for (unsigned int i = 0 ; i < wxSCI_MAX_MARGIN ; ++i)
+        SetMarginWidth(i,0);
+    SetZoom(-10); // smallest allowed zoom factor
+    SetUseHorizontalScrollBar(false);
 
+    bool showVertScrollbar = cfg->ReadBool(_T("/mini_doc/show_vertical_scrollbar"), true);
+    SetUseVerticalScrollBar(showVertScrollbar);
+
+    wxColor color = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
+
+    MarkerDeleteAll(GetOurMarkerNumber());
+    MarkerSetBackground(GetOurMarkerNumber(), color);
+    const int alpha = 100;
+    MarkerSetAlpha(GetOurMarkerNumber(), alpha);
+}
 
 
 MiniStyledTextCtrl::~MiniStyledTextCtrl()
@@ -152,8 +159,9 @@ void MiniStyledTextCtrl::SetVisibleRange(int from, int length, bool force)
         MakeVisible(from, length);
     }
 }
-void MiniStyledTextCtrl::UpdateBackground()
+void MiniStyledTextCtrl::UpdateConfig()
 {
+    Init();
     SetMarker();
 }
 void MiniStyledTextCtrl::MakeVisible(int from, int length)

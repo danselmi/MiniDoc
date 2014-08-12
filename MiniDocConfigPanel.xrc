@@ -44,6 +44,13 @@
 				<border>5</border>
 			</object>
 			<object class="sizeritem">
+				<object class="wxCheckBox" name="ID_CHECKBOX3">
+					<label>Show vertical scrollbar</label>
+				</object>
+				<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+			</object>
+			<object class="sizeritem">
 				<object class="wxBoxSizer">
 					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT2">
@@ -71,6 +78,11 @@
 				</object>
 				<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 				<border>5</border>
+			</object>
+			<object class="spacer">
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+				<option>1</option>
 			</object>
 		</object>
 	</object>
