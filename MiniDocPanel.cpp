@@ -14,6 +14,7 @@
 #include <cbeditor.h>
 #include <editormanager.h>
 #include <editorcolourset.h>
+#include <configmanager.h>
 
 #include <wx/intl.h>
 #include <wx/string.h>
