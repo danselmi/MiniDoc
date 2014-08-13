@@ -15,6 +15,7 @@
 #include <editormanager.h>
 #include <editorcolourset.h>
 #include <configmanager.h>
+#include <configmanager.h>
 
 #include <wx/intl.h>
 #include <wx/string.h>
@@ -55,6 +56,11 @@ void MiniDocPanel::UpdateMiniStc(EditorBase *eb, bool force)
     if(!editor)
         return;
     cbStyledTextCtrl *stc = editor->GetControl();
+
+    UpdateMiniStc(stc);
+}
+void MiniDocPanel::UpdateMiniStc(cbStyledTextCtrl *stc, bool force)
+{
     if(!stc)
         return;
     miniStc_->UpdateMiniature(stc, force);
