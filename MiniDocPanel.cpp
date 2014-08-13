@@ -74,6 +74,9 @@ void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
         ecs->Apply(ed->GetLanguage(), miniStc_);
 //        for (unsigned int style = 0 ; style <= wxSCI_STYLE_MAX ; ++style)
 //            miniStc_->StyleSetSize(style, 3);
+//        miniStc_->PrepareMainView(ed->GetLeftSplitViewControl());
+//        miniStc_->PrepareMainView(ed->GetRightSplitViewControl());
+
         miniStc_->UpdateMiniature(ed->GetControl(),true);
     }
     else

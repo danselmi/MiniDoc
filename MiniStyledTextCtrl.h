@@ -14,6 +14,7 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         void UpdateMiniature(cbStyledTextCtrl *stc, bool force = false);
         void UpdateConfig();
         void Init();
+        void PrepareMainView(cbStyledTextCtrl *stc);
     protected:
     private:
         void SetMarker();

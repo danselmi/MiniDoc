@@ -210,9 +210,22 @@ void MiniStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc, bool force)
 
     SetVisibleRange(firstVisibleLine, totalVisibleLines, force);
 }
+
+void MiniStyledTextCtrl::PrepareMainView(cbStyledTextCtrl* stc)
+{
+    if(!stc)
+        return;
+    stc->MarkerDefine(GetOurMarkerNumber(), wxSCI_MARK_EMPTY);
+}
+
 void MiniStyledTextCtrl::SyncFoldState(cbStyledTextCtrl *stc)
 {
+    return;
     /// should we do sync the folding into the miniature?
+
+    /// doing this would also require to calculate different positions for the marker
+    for(int line = 0; line < GetLineCount() ; ++line)
+        SetFoldLevel(line, stc->GetFoldLevel(line));
 }
 const int MiniStyledTextCtrl::GetOurMarkerNumber()const
 {
