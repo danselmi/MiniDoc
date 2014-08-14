@@ -59,6 +59,11 @@ void MiniDoc::OnAttach()
 
 
     m_pPanel = new MiniDocPanel(Manager::Get()->GetAppWindow());
+    if(!m_pPanel)
+    {
+        Manager::Get()->GetLogManager()->Log(_T("Could not create MiniDoc!"));
+        return;
+    }
 
     EditorHooks::HookFunctorBase *editor_hook = new EditorHooks::HookFunctor<MiniDoc>(this, &MiniDoc::OnEditorHook);
     m_FunctorId = EditorHooks::RegisterHook( editor_hook );
@@ -81,6 +86,14 @@ void MiniDoc::OnAttach()
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_OPEN,        new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorOpen));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_ACTIVATED,   new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorActivated));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_DEACTIVATED, new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorDeactivated));
+
+    // check if editor is open
+    EditorBase *eb = Manager::Get()->GetEditorManager()->GetActiveEditor();
+    if(eb && eb->IsBuiltinEditor())
+    {
+        m_pPanel->ShowMiniatureOf(eb);
+        static_cast<cbEditor*>(eb)->GetLeftSplitViewControl()->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+    }
 }
 
 void MiniDoc::OnRelease(bool appShutDown)
