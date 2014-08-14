@@ -1,0 +1,23 @@
+
+to fix:
+Update preview 
+- after resize of main view will resize 2nd splitted view which gets not catched atm.
+- deleting lines is not catched.
+
+Default Marker
+Scintilla doc: "By default, all 32 markers are set to SC_MARK_CIRCLE with a black foreground and a white background."
+Solution to check:
+- PrepareMainView() will make the marker invisible in the main view. 
+  Dont' know when a second control gets created.
+- Make default marker invisible in core. At least the unused [8..22]
+
+
+
+Open points:
+A) Suggestions:
+    3. use even smaller font for larger files
+    4. it would be good if the space between the lines could be made smaller, so more text could be made visible.
+-> size of font can not be minimized further.
+
+B) bug in wxScintilla: border around every line with marker
+

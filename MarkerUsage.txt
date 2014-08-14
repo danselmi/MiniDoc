@@ -1,0 +1,39 @@
+
+MARKER_MAX (31)
+Marker numbers 0 to 24 have no pre-defined function;
+By default, all 32 markers are set to SC_MARK_CIRCLE 
+
+cbEditor.h											BREAKPOINT_OTHER_MARKER					1
+													BREAKPOINT_DISABLED_MARKER				2
+													BREAKPOINT_MARKER						3
+													BOOKMARK_MARKER							4
+													ERROR_MARKER							5
+													DEBUG_MARKER							6
+													DEBUG_MARKER_HIGHLIGHT					7
+
+scintilla.h											wxSCI_MARKNUM_CHANGEUNSAVED				23
+													wxSCI_MARKNUM_CHANGESAVED				24
+													wxSCI_MARKNUM_FOLDEREND					25
+													wxSCI_MARKNUM_FOLDEROPENMID				26
+													wxSCI_MARKNUM_FOLDERMIDTAIL				27
+													wxSCI_MARKNUM_FOLDERTAIL				28
+													wxSCI_MARKNUM_FOLDERSUB					29
+													wxSCI_MARKNUM_FOLDER					30
+													wxSCI_MARKNUM_FOLDEROPEN				31
+
+													
+MiniDoc/MiniStyledTextCtrl.cpp						GetOurMarkerNumber()					8
+
+													
+plugins/contrib/BrowseTracker/BrowseTrackerDef.h	BROWSETRACKER_MARKER					9
+plugins/contrib/BrowseTracker/BrowseTrackerDef.h	BOOKMARK_MARKER							2
+
+cbGcov/cbGCov.cpp									cbGcovNaMarker							10
+													cbGcovOkMarker							11
+													cbGcovKoMarker							12
+
+
+other editors using their own marker
+Fortranproject finfoWindow
+cbDiff cbSideBySideCtrl; cbTableCtrl
+

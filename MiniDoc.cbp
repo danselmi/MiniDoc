@@ -8,7 +8,7 @@
 		<Build>
 			<Target title="default">
 				<Option output="MiniDoc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="../../../.objs/plugins/contrib/MiniDoc" />
+				<Option object_output=".obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option parameters="--debug-log --multiple-instance -na -ns -nd" />
@@ -42,12 +42,13 @@
 					<Add directory="$(#wx.lib)/gcc_dll" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="zip -j9 MiniDoc.zip manifest.xml" />
+					<Add after="zip -j9 MiniDoc.zip manifest.xml *.xrc" />
 					<Add after="zip -j9 MiniDoc.cbplugin MiniDoc.dll MiniDoc.zip" />
 				</ExtraCommands>
 			</Target>
 			<Target title="plugin">
 				<Option output="../../../devel/share/codeblocks/plugins/MiniDoc" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option parameters="--debug-log --multiple-instance -na -ns -nd" />
@@ -96,6 +97,7 @@
 		<Unit filename="MiniDocPanel.h" />
 		<Unit filename="MiniStyledTextCtrl.cpp" />
 		<Unit filename="MiniStyledTextCtrl.h" />
+		<Unit filename="ToDo.txt" />
 		<Unit filename="manifest.xml" />
 		<Unit filename="wxsmith/MiniDocConfigPanel.wxs" />
 		<Extensions>

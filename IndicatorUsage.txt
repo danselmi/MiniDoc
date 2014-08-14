@@ -1,0 +1,14 @@
+
+INDIC_MAX(31) 
+
+
+contrib\IncrementalSearch\IncrementalSearch.cpp									m_IndicFound  		21
+																				m_IndicHighlight 	22
+
+occurrenceshighlighting\highlighter.cpp			permanently highlighted text	GetIndicator()		12 
+																				theIndicator		10 
+
+contrib\SpellChecker\OnlineSpellChecker.cpp										GetIndicator()		11
+
+cbStyledTextCtrl.cpp							Brace highlighting				s_indicHighlight	20 
+

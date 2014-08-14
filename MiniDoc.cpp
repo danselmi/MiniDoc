@@ -102,6 +102,7 @@ void MiniDoc::OnRelease(bool appShutDown)
 
     if ( m_pPanel && !appShutDown )
     {
+        m_pPanel->ShowMiniatureOf(NULL);
         CodeBlocksDockEvent docevt(cbEVT_REMOVE_DOCK_WINDOW);
         docevt.pWindow = m_pPanel;
         Manager::Get()->ProcessEvent(docevt);
@@ -157,7 +158,7 @@ void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)
         m_pPanel->UpdateMiniStc(editor);
 //    else if(event.GetEventType() == wxEVT_SCI_MODIFIED)
 //    {
-//        if ( event.GetModificationType() & wxSCI_MOD_CHANGEFOLD)
+//        if ( (event.GetModificationType() & wxSCI_MOD_DELETETEXT) != 0)
 //            m_pPanel->UpdateMiniStc(editor, true);
 //    }
 }
