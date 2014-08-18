@@ -3,6 +3,7 @@
 #include "editor_hooks.h"
 #include "cbcolourmanager.h"
 #include "editormanager.h"
+#include "logmanager.h"
 #include "cbeditor.h"
 
 #include "MiniDoc.h"
