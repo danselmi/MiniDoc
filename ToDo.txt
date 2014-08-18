@@ -9,7 +9,7 @@ Scintilla doc: "By default, all 32 markers are set to SC_MARK_CIRCLE with a blac
 Solution to check:
 - PrepareMainView() will make the marker invisible in the main view. 
   Dont' know when a second control gets created.
-- Make default marker invisible in core. At least the unused [8..22]
+- Make default marker invisible in core. At least the unused [0..22]
 
 
 
