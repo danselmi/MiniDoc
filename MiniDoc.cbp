@@ -97,6 +97,8 @@
 		<Unit filename="MiniDocPanel.h" />
 		<Unit filename="MiniStyledTextCtrl.cpp" />
 		<Unit filename="MiniStyledTextCtrl.h" />
+		<Unit filename="MiniStyledTextCtrlEvent.cpp" />
+		<Unit filename="MiniStyledTextCtrlEvent.h" />
 		<Unit filename="ToDo.txt" />
 		<Unit filename="manifest.xml" />
 		<Unit filename="wxsmith/MiniDocConfigPanel.wxs" />

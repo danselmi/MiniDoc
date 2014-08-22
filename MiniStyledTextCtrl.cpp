@@ -4,7 +4,7 @@
 #include "configmanager.h"
 #include "cbcolourmanager.h"
 
-const wxEventType MiniStyledTextCtrlCommandEvent = wxNewEventType();
+#include "MiniStyledTextCtrlEvent.h"
 
 BEGIN_EVENT_TABLE(MiniStyledTextCtrl, cbStyledTextCtrl)
     EVT_KEY_DOWN        (MiniStyledTextCtrl::OnKey)
@@ -23,8 +23,6 @@ BEGIN_EVENT_TABLE(MiniStyledTextCtrl, cbStyledTextCtrl)
     EVT_LEFT_DCLICK     (MiniStyledTextCtrl::OnMouseDClick)
     EVT_MIDDLE_DCLICK   (MiniStyledTextCtrl::OnMouseDClick)
     EVT_RIGHT_DCLICK    (MiniStyledTextCtrl::OnMouseDClick)
-    EVT_PAINT           (MiniStyledTextCtrl::OnPaint)
-    EVT_ERASE_BACKGROUND(MiniStyledTextCtrl::OnEraseBackground)
 END_EVENT_TABLE()
 
 

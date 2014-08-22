@@ -11,10 +11,10 @@
 #include <wx/panel.h>
 
 #include "MiniStyledTextCtrl.h"
+#include "MiniStyledTextCtrlEvent.h"
 
 class EditorBase;
 class cbEditor;
-class MiniStyledTextCtrl;
 
 class MiniDocPanel: public wxPanel
 {
