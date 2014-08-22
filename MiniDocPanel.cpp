@@ -27,13 +27,28 @@ END_EVENT_TABLE()
 MiniDocPanel::MiniDocPanel(wxWindow* parent,wxWindowID id)
 {
     currentEb_ = NULL;
+    miniStc_ = NULL;
+    microStc_ = NULL;
     wxBoxSizer* boxSizer;
 
     Create(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("id"));
 
-    boxSizer = new wxBoxSizer(wxVERTICAL);
-    miniStc_ = new MiniStyledTextCtrl(this, wxID_ANY);
-    boxSizer->Add(miniStc_, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    boxSizer = new wxBoxSizer(wxHORIZONTAL);
+
+    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+    bool showMini = cfg->ReadBool(_T("/mini_doc/show_mini"), true);
+    bool showMicro = cfg->ReadBool(_T("/mini_doc/show_micro"), true);
+    if(showMini)
+    {
+        miniStc_ = new MiniStyledTextCtrl(this, wxID_ANY);
+        boxSizer->Add(miniStc_, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    }
+
+    if(showMicro)
+    {
+        microStc_ = new MicroStyledTextCtrl(this, wxID_ANY);
+        boxSizer->Add(microStc_, showMini?0:1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    }
 
     SetSizer(boxSizer);
     boxSizer->Fit(this);
@@ -45,7 +60,10 @@ MiniDocPanel::~MiniDocPanel()
 }
 void MiniDocPanel::UpdateMiniStcConfig()
 {
-    miniStc_->UpdateConfig();
+    if(miniStc_)
+        miniStc_->UpdateConfig();
+    if(microStc_)
+        microStc_->UpdateConfig();
 }
 void MiniDocPanel::UpdateMiniStc(EditorBase *eb, bool force)
 {
@@ -63,25 +81,36 @@ void MiniDocPanel::UpdateMiniStc(cbStyledTextCtrl *stc, bool force)
 {
     if(!stc)
         return;
-    miniStc_->UpdateMiniature(stc, force);
+    if(miniStc_)
+        miniStc_->UpdateMiniature(stc, force);
+    if(microStc_)
+        microStc_->UpdateMiniature(stc, force);
 }
 void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
 {
     if(ed)
     {
-        miniStc_->SetDocPointer(ed->GetControl()->GetDocPointer());
-        EditorColourSet *ecs = Manager::Get()->GetEditorManager()->GetColourSet();
-        ecs->Apply(ed->GetLanguage(), miniStc_);
-//        for (unsigned int style = 0 ; style <= wxSCI_STYLE_MAX ; ++style)
-//            miniStc_->StyleSetSize(style, 3);
-//        miniStc_->PrepareMainView(ed->GetLeftSplitViewControl());
-//        miniStc_->PrepareMainView(ed->GetRightSplitViewControl());
+        if(miniStc_)
+        {
+            miniStc_->SetDocPointer(ed->GetControl()->GetDocPointer());
+            EditorColourSet *ecs = Manager::Get()->GetEditorManager()->GetColourSet();
+            ecs->Apply(ed->GetLanguage(), miniStc_);
+    //        for (unsigned int style = 0 ; style <= wxSCI_STYLE_MAX ; ++style)
+    //            miniStc_->StyleSetSize(style, 3);
+    //        miniStc_->PrepareMainView(ed->GetLeftSplitViewControl());
+    //        miniStc_->PrepareMainView(ed->GetRightSplitViewControl());
 
-        miniStc_->UpdateMiniature(ed->GetControl(),true);
+            miniStc_->UpdateMiniature(ed->GetControl(),true);
+        }
+        if(microStc_)
+            microStc_->UpdateMiniature(ed->GetControl(),true);
     }
     else
     {
-        miniStc_->SetDocPointer(NULL);
+        if(miniStc_)
+            miniStc_->SetDocPointer(NULL);
+        if(microStc_)
+            microStc_->AssociateNoDoc();
     }
 }
 

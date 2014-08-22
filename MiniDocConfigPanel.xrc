@@ -53,6 +53,41 @@
 			<object class="sizeritem">
 				<object class="wxBoxSizer">
 					<object class="sizeritem">
+						<object class="wxRadioButton" name="ID_RADIOBUTTON1">
+							<label>Show Miniature</label>
+							<selected>1</selected>
+							<tooltip>Takes place after restart</tooltip>
+							<style>wxRB_GROUP</style>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxRadioButton" name="ID_RADIOBUTTON2">
+							<label>Show MicroView</label>
+							<tooltip>Takes place after restart</tooltip>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxRadioButton" name="ID_RADIOBUTTON3">
+							<label>Show both</label>
+							<tooltip>Takes place after restart</tooltip>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+				<border>5</border>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer">
+					<object class="sizeritem">
 						<object class="wxStaticText" name="ID_STATICTEXT2">
 							<label>Position of main view: </label>
 							<tooltip>Select how to position the main view after clicking into the MiniDoc</tooltip>

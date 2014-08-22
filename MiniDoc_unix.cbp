@@ -55,6 +55,8 @@
 		<VirtualTargets>
 			<Add alias="All" targets="plugin;" />
 		</VirtualTargets>
+		<Unit filename="MicroStyledTextCtrl.cpp" />
+		<Unit filename="MicroStyledTextCtrl.h" />
 		<Unit filename="MiniDoc.cpp" />
 		<Unit filename="MiniDoc.h" />
 		<Unit filename="MiniDocConfigPanel.cpp" />
@@ -63,6 +65,9 @@
 		<Unit filename="MiniDocPanel.h" />
 		<Unit filename="MiniStyledTextCtrl.cpp" />
 		<Unit filename="MiniStyledTextCtrl.h" />
+		<Unit filename="MiniStyledTextCtrlEvent.cpp" />
+		<Unit filename="MiniStyledTextCtrlEvent.h" />
+		<Unit filename="ToDo.txt" />
 		<Unit filename="manifest.xml" />
 		<Unit filename="wxsmith/MiniDocConfigPanel.wxs" />
 		<Extensions>
