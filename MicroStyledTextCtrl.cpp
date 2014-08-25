@@ -7,7 +7,7 @@
 #include "cbcolourmanager.h"
 #include "logmanager.h"
 
-#define COLUMNS 4
+const unsigned int COLUMNS_PER_LINE = 4;
 
 BEGIN_EVENT_TABLE(MicroStyledTextCtrl, wxPanel)
     EVT_LEFT_DOWN       (MicroStyledTextCtrl::OnMouseDown)
@@ -80,8 +80,8 @@ void MicroStyledTextCtrl::OnPaint(wxPaintEvent &evt)
         int y = visibles[k].line;
         if ( getHeight() < linesInDoc_ )
             y = y * sz.y/linesInDoc_;
-        int x1 = visibles[k].colStart*sz.x/COLUMNS;
-        int x2 = (visibles[k].colEnd+1)*sz.x/COLUMNS;
+        int x1 = visibles[k].colStart*sz.x/COLUMNS_PER_LINE;
+        int x2 = (visibles[k].colEnd+1)*sz.x/COLUMNS_PER_LINE;
         dc.DrawLine(wxPoint(x1,y), wxPoint(x2, y));
     }
 }
@@ -126,12 +126,10 @@ void MicroStyledTextCtrl::GetVisibles(cbStyledTextCtrl *stc)
 }
 void MicroStyledTextCtrl::GetvisibleIndicators(cbStyledTextCtrl *stc, int theIndicator, const wxColor &color)
 {
-
-    visible vis;
-    vis.color = color;
-
-    const int charsPerLine = 120;
+    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+    const int charsPerLine = cfg->ReadInt(_T("/gutter/column"), 80);
     int pos = 0;
+    const int COLUMNS = COLUMNS_PER_LINE;
     for(pos = 0 ; pos < stc->GetLength() ; ++pos)
     {
         int indVal = stc->IndicatorValueAt(theIndicator,pos);
@@ -139,6 +137,8 @@ void MicroStyledTextCtrl::GetvisibleIndicators(cbStyledTextCtrl *stc, int theInd
         {
             int end = stc->IndicatorEnd(theIndicator, pos);
 
+            visible vis;
+            vis.color = color;
             vis.line = stc->LineFromPosition(pos);
             vis.colStart = (pos-stc->PositionFromLine(vis.line))*COLUMNS/charsPerLine;
             if (vis.colStart > 3)
