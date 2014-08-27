@@ -12,3 +12,17 @@ Index: cbeditor.cpp
      return control;
  }
  
+Index: wxscintilla/include/wx/wxscintilla.h
+===================================================================
+--- wxscintilla/include/wx/wxscintilla.h	(revision 9861)
++++ wxscintilla/include/wx/wxscintilla.h	(working copy)
+@@ -123,6 +123,9 @@
+ #define wxSCI_MARK_CHARACTER 10000
+ 
+ // Markers used for outlining and changed column.
++/* C::B begin */
++#define wxSCI_MARKNUM_LASTUNUSED 22
++/* C::B end */
+ #define wxSCI_MARKNUM_CHANGEUNSAVED 23
+ #define wxSCI_MARKNUM_CHANGESAVED 24
+ #define wxSCI_MARKNUM_FOLDEREND 25
