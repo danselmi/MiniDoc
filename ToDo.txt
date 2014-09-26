@@ -1,17 +1,29 @@
-
 to fix:
-Update preview
-- deleting lines is not catched.
+- sync(Update) MiniDoc
+  - deleting lines is not catched correctly
+
+- sync MicroView
+  - sync seems to work better with splitted editor. Why?
 
 
 Open points:
-A) Suggestions:
-    3. use even smaller font for larger files
-    4. it would be good if the space between the lines could be made smaller, so more text could be made visible.
--> size of font can not be minimized further.
+A) Speed
+   it feels very slow??
+B) Suggestions:
+    - use even smaller font for larger files
+    - it would be good if the space between the lines could be made smaller, so more text could be made visible.
+    -> size of font can not be minimized further.
+	-> it is not that bad as it is IMHO.
 
 C) MicroView
    - add other graphical infos from editor to MicroView
-   - sync
+
+D) C::B 
+how to manage the usage of the indicators and markers? Is it needed?
+MiniStyledTextCtrl has to follow changes in different plugins to "mimic" cbEditors control colors.
+(incremental search and highlighter)
+Changing their configuration needs a restart of MiniDoc plugin to become colored the same.
+Any plugin can "use" any marker/indicator number.
+   
    
 
