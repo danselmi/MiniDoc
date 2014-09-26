@@ -127,7 +127,11 @@ void MiniDoc::OnEditorActivated(CodeBlocksEvent& event)
     {
         m_pPanel->ShowMiniatureOf(event.GetEditor());
         if (event.GetEditor()->IsBuiltinEditor())
+        {
             static_cast<cbEditor*>(event.GetEditor())->GetLeftSplitViewControl()->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+            cbStyledTextCtrl *stc= static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
+            if(stc) stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+        }
     }
 }
 void MiniDoc::OnEditorDeactivated(CodeBlocksEvent& event)
@@ -135,7 +139,11 @@ void MiniDoc::OnEditorDeactivated(CodeBlocksEvent& event)
     if (m_pPanel && IsAttached())
     {
         if (event.GetEditor()->IsBuiltinEditor())
+        {
             static_cast<cbEditor*>(event.GetEditor())->GetLeftSplitViewControl()->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+            cbStyledTextCtrl *stc= static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
+            if(stc) stc->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+        }
         m_pPanel->ShowMiniatureOf(NULL);
     }
 }
