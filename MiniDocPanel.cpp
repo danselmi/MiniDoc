@@ -75,7 +75,7 @@ void MiniDocPanel::UpdateMiniStc(EditorBase *eb, bool force)
         return;
     cbStyledTextCtrl *stc = editor->GetControl();
 
-    UpdateMiniStc(stc);
+    UpdateMiniStc(stc, force);
 }
 void MiniDocPanel::UpdateMiniStc(cbStyledTextCtrl *stc, bool force)
 {
