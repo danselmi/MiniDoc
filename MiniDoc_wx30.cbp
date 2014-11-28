@@ -2,17 +2,17 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="MiniDoc" />
+		<Option title="MiniDoc wx3.0.x" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="plugin">
-				<Option output="../../../devel/share/codeblocks/plugins/MiniDoc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="..\..\..\.objs\plugins\contrib\MiniDoc" />
+				<Option output="../../../devel30/share/codeblocks/plugins/MiniDoc" prefix_auto="1" extension_auto="1" />
+				<Option object_output="..\..\..\.objs30\plugins\contrib\MiniDoc" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option parameters="--debug-log --multiple-instance -na -ns -nd" />
-				<Option host_application="../../../devel/codeblocks.exe" />
+				<Option host_application="../../../devel30/codeblocks.exe" />
 				<Option run_host_application_in_terminal="0" />
 				<Compiler>
 					<Add option="-g" />
@@ -20,7 +20,6 @@
 					<Add option="-mthreads" />
 					<Add option="-fmessage-length=0" />
 					<Add option="-fexceptions" />
-					<Add option="-Winvalid-pch" />
 					<Add option="-DBUILDING_PLUGIN" />
 					<Add option="-DHAVE_W32API_H" />
 					<Add option="-D__WXMSW__" />
@@ -31,18 +30,18 @@
 					<Add option="-DwxUSE_UNICODE" />
 					<Add directory="../../../include" />
 					<Add directory="../../../sdk/wxscintilla/include" />
-					<Add directory="$(#wx.include)" />
-					<Add directory="$(#wx.lib)/gcc_dll/mswu" />
+					<Add directory="$(#wx30.include)" />
+					<Add directory="$(#wx30.lib)/gcc_dll/mswu" />
 				</Compiler>
 				<Linker>
 					<Add option="-mthreads" />
 					<Add library="codeblocks" />
-					<Add library="wxmsw28u" />
-					<Add directory="../../../devel" />
-					<Add directory="$(#wx.lib)/gcc_dll" />
+					<Add library="wxmsw30u" />
+					<Add directory="../../../devel30" />
+					<Add directory="$(#wx30.lib)/gcc_dll" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="zip -jq9 ..\..\..\devel\share\codeblocks\MiniDoc.zip manifest.xml *.xrc" />
+					<Add after="zip -jq9 ..\..\..\devel30\share\codeblocks\MiniDoc.zip manifest.xml *.xrc" />
 				</ExtraCommands>
 			</Target>
 		</Build>
