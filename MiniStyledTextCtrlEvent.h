@@ -5,7 +5,6 @@
 
 extern const wxEventType MiniStyledTextCtrlCommandEvent;
 
-// A custom event that transports a whole wxString.
 class MiniStyledTextCtrlLineClickedEvent: public wxCommandEvent
 {
 public:
