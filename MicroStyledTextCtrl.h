@@ -11,7 +11,7 @@ class MicroStyledTextCtrl: public wxPanel
         MicroStyledTextCtrl(wxWindow* pParent, int id);
         virtual ~MicroStyledTextCtrl();
 
-        void UpdateMiniature(cbStyledTextCtrl *stc, bool force = false);
+        void UpdateMiniature(cbStyledTextCtrl *stc);
         void UpdateConfig();
         void AssociateNoDoc();
     private:

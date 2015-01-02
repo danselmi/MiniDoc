@@ -24,9 +24,8 @@ class MiniDocPanel: public wxPanel
         virtual ~MiniDocPanel();
 
         void ShowMiniatureOf(EditorBase *eb = NULL);
-        void UpdateMiniStc(EditorBase *eb, bool force=false);
-        void UpdateMiniStc(cbStyledTextCtrl *stc, bool force=false);
-        void UpdateMiniStcConfig();
+        void UpdateMiniStc(EditorBase *eb);
+        void UpdateConfig();
 
     protected:
         void OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event);
@@ -35,7 +34,6 @@ class MiniDocPanel: public wxPanel
 
         MiniStyledTextCtrl *miniStc_;
         MicroStyledTextCtrl *microStc_;
-        EditorBase *currentEb_;
 
     private:
         DECLARE_EVENT_TABLE()

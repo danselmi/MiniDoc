@@ -26,7 +26,6 @@ END_EVENT_TABLE()
 
 MiniDocPanel::MiniDocPanel(wxWindow* parent,wxWindowID id)
 {
-    currentEb_ = NULL;
     miniStc_ = NULL;
     microStc_ = NULL;
     wxBoxSizer* boxSizer;
@@ -58,33 +57,27 @@ MiniDocPanel::MiniDocPanel(wxWindow* parent,wxWindowID id)
 MiniDocPanel::~MiniDocPanel()
 {
 }
-void MiniDocPanel::UpdateMiniStcConfig()
+void MiniDocPanel::UpdateConfig()
 {
     if(miniStc_)
         miniStc_->UpdateConfig();
     if(microStc_)
         microStc_->UpdateConfig();
 }
-void MiniDocPanel::UpdateMiniStc(EditorBase *eb, bool force)
+//void MiniDocPanel::UpdateMiniStc(cbStyledTextCtrl *stc)
+void MiniDocPanel::UpdateMiniStc(EditorBase *eb)
 {
     if(!eb)
         return;
+    if(eb && eb->IsBuiltinEditor())
+    {
+        cbStyledTextCtrl *stc = static_cast<cbEditor *>(eb)->GetControl();
 
-    cbEditor *editor = dynamic_cast<cbEditor *>(eb);
-    if(!editor)
-        return;
-    cbStyledTextCtrl *stc = editor->GetControl();
-
-    UpdateMiniStc(stc, force);
-}
-void MiniDocPanel::UpdateMiniStc(cbStyledTextCtrl *stc, bool force)
-{
-    if(!stc)
-        return;
-    if(miniStc_)
-        miniStc_->UpdateMiniature(stc, force);
-    if(microStc_)
-        microStc_->UpdateMiniature(stc, force);
+        if(miniStc_)
+            miniStc_->UpdateMiniature(stc);
+        if(microStc_)
+            microStc_->UpdateMiniature(stc);
+    }
 }
 void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
 {
@@ -95,15 +88,11 @@ void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
             miniStc_->SetDocPointer(ed->GetControl()->GetDocPointer());
             EditorColourSet *ecs = Manager::Get()->GetEditorManager()->GetColourSet();
             ecs->Apply(ed->GetLanguage(), miniStc_);
-    //        for (unsigned int style = 0 ; style <= wxSCI_STYLE_MAX ; ++style)
-    //            miniStc_->StyleSetSize(style, 3);
-    //        miniStc_->PrepareMainView(ed->GetLeftSplitViewControl());
-    //        miniStc_->PrepareMainView(ed->GetRightSplitViewControl());
 
-            miniStc_->UpdateMiniature(ed->GetControl(),true);
+            miniStc_->UpdateMiniature(ed->GetControl());
         }
         if(microStc_)
-            microStc_->UpdateMiniature(ed->GetControl(),true);
+            microStc_->UpdateMiniature(ed->GetControl());
     }
     else
     {
@@ -119,7 +108,6 @@ void MiniDocPanel::ShowMiniatureOf(EditorBase *eb)
 {
     wxString str;
 
-    currentEb_ = eb;
     if(eb)
     {
         str = _T("active: ");
@@ -150,38 +138,35 @@ void MiniDocPanel::OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event)
 {
     int line = event.GetLine();
 
-    if ( currentEb_ )
+    cbEditor *ed = dynamic_cast<cbEditor*>(Manager::Get()->GetEditorManager()->GetActiveEditor());
+    if(ed)
     {
-        cbEditor *ed = dynamic_cast<cbEditor*>(currentEb_);
-        if(ed)
+        cbStyledTextCtrl *stc = ed->GetControl();
+        if (stc)
         {
-            cbStyledTextCtrl *stc = ed->GetControl();
-            if (stc)
+            ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+            int k;
+                /*k = 0; //no adjustment of position
+                k = 3; //selected line 1/3 into screen
+                k = 4; //selected line 1/4 into screen
+                k = 2; //selected line on center
+                k = 1; //selected line on top*/
+            k = cfg->ReadInt(_T("mini_doc/pos_of_main"), 2);
+            switch (k)
             {
-                ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
-                int k;
-                    /*k = 0; //no adjustment of position
-                    k = 3; //selected line 1/3 into screen
-                    k = 4; //selected line 1/4 into screen
-                    k = 2; //selected line on center
-                    k = 1; //selected line on top*/
-                k = cfg->ReadInt(_T("mini_doc/pos_of_main"), 2);
-                switch (k)
-                {
-                case 4:
-                case 3:
-                case 2:
-                    stc->ScrollToLine(line - stc->LinesOnScreen()/k);
-                    break;
-                case 1:
-                    stc->ScrollToLine(line);
-                    break;
-                case 0:
-                default:
-                    break;
-                }
-
+            case 4:
+            case 3:
+            case 2:
+                stc->ScrollToLine(line - stc->LinesOnScreen()/k);
+                break;
+            case 1:
+                stc->ScrollToLine(line);
+                break;
+            case 0:
+            default:
+                break;
             }
+
         }
     }
 }

@@ -139,7 +139,7 @@ void MiniDocConfigPanel::OnApply()
     cfg->Write(_T("/mini_doc/show_vertical_scrollbar"), CheckBox3->GetValue());
     cfg->Write(_T("/mini_doc/pos_of_main"), Choice1->GetSelection());
 
-    panel_->UpdateMiniStcConfig();
+    panel_->UpdateConfig();
 
     //takes place after restart:
     bool showMini = RadioButton1->GetValue() || RadioButton3->GetValue();

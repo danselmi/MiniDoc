@@ -32,7 +32,8 @@ END_EVENT_TABLE()
 
 // constructor
 MiniDoc::MiniDoc():
-    m_pPanel(NULL)
+    m_pPanel(NULL),
+    currentEb_(NULL)
 {
     // Make sure our resources are available.
     // In the generated boilerplate code we have no resources but when
@@ -83,17 +84,21 @@ void MiniDoc::OnAttach()
     Manager::Get()->ProcessEvent(dockevt);
 
 
-    Manager::Get()->RegisterEventSink(cbEVT_EDITOR_CLOSE,       new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorClose));
-    Manager::Get()->RegisterEventSink(cbEVT_EDITOR_OPEN,        new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorOpen));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_ACTIVATED,   new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorActivated));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_DEACTIVATED, new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorDeactivated));
+    Manager::Get()->RegisterEventSink(cbEVT_EDITOR_SPLIT,       new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorSplit));
+    Manager::Get()->RegisterEventSink(cbEVT_EDITOR_UNSPLIT,     new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorUnsplit));
 
     // check if editor is open
     EditorBase *eb = Manager::Get()->GetEditorManager()->GetActiveEditor();
     if(eb && eb->IsBuiltinEditor())
     {
+        currentEb_ = eb;
         m_pPanel->ShowMiniatureOf(eb);
         static_cast<cbEditor*>(eb)->GetLeftSplitViewControl()->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+        cbStyledTextCtrl *stc = static_cast<cbEditor*>(eb)->GetRightSplitViewControl();
+        if(stc)
+            stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
     }
 }
 
@@ -103,6 +108,14 @@ void MiniDoc::OnRelease(bool appShutDown)
 
     if ( m_pPanel && !appShutDown )
     {
+        EditorBase *eb = Manager::Get()->GetEditorManager()->GetActiveEditor();
+        if (eb && eb->IsBuiltinEditor())
+        {
+            static_cast<cbEditor*>(eb)->GetLeftSplitViewControl()->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+            cbStyledTextCtrl *stc = static_cast<cbEditor*>(eb)->GetRightSplitViewControl();
+            if(stc)
+                stc->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+        }
         m_pPanel->ShowMiniatureOf(NULL);
         CodeBlocksDockEvent docevt(cbEVT_REMOVE_DOCK_WINDOW);
         docevt.pWindow = m_pPanel;
@@ -110,47 +123,71 @@ void MiniDoc::OnRelease(bool appShutDown)
         // and destroy the panel
         m_pPanel->Destroy();
         m_pPanel = NULL;
+        currentEb_ = NULL;
     }
 }
 
-void MiniDoc::OnEditorClose(CodeBlocksEvent& event)
-{
-    if (m_pPanel && IsAttached())
-        m_pPanel->ShowMiniatureOf(Manager::Get()->GetEditorManager()->GetActiveEditor());
-}
-void MiniDoc::OnEditorOpen(CodeBlocksEvent& event)
-{
-}
 void MiniDoc::OnEditorActivated(CodeBlocksEvent& event)
 {
     if (m_pPanel && IsAttached())
     {
+        currentEb_ = event.GetEditor();
         m_pPanel->ShowMiniatureOf(event.GetEditor());
         if (event.GetEditor()->IsBuiltinEditor())
         {
             static_cast<cbEditor*>(event.GetEditor())->GetLeftSplitViewControl()->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-            cbStyledTextCtrl *stc= static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
-            if(stc) stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+            cbStyledTextCtrl *stc = static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
+            if(stc)
+                stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
         }
     }
 }
 void MiniDoc::OnEditorDeactivated(CodeBlocksEvent& event)
 {
+    currentEb_ = NULL;
     if (m_pPanel && IsAttached())
     {
         if (event.GetEditor()->IsBuiltinEditor())
         {
             static_cast<cbEditor*>(event.GetEditor())->GetLeftSplitViewControl()->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-            cbStyledTextCtrl *stc= static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
-            if(stc) stc->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+            cbStyledTextCtrl *stc = static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
+            if(stc)
+                stc->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
         }
         m_pPanel->ShowMiniatureOf(NULL);
     }
 }
+
+void MiniDoc::OnEditorUnsplit(CodeBlocksEvent& event)
+{
+    if (m_pPanel && IsAttached())
+    {
+        if (event.GetEditor()->IsBuiltinEditor())
+        {
+            cbStyledTextCtrl *stc = static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
+            //if(stc)
+                stc->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+        }
+    }
+}
+
+void MiniDoc::OnEditorSplit(CodeBlocksEvent& event)
+{
+    if (m_pPanel && IsAttached())
+    {
+        if (event.GetEditor()->IsBuiltinEditor())
+        {
+            cbStyledTextCtrl *stc = static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
+            //if(stc)
+                stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+        }
+    }
+}
+
 void MiniDoc::OnResize(wxSizeEvent& event)
 {
-    cbStyledTextCtrl *stc = (cbStyledTextCtrl*)event.GetEventObject();
-    m_pPanel->UpdateMiniStc(stc);
+    //cbStyledTextCtrl *stc = (cbStyledTextCtrl*)event.GetEventObject();
+    m_pPanel->UpdateMiniStc(currentEb_);
     event.Skip();
 }
 
@@ -161,15 +198,10 @@ void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)
         cbStyledTextCtrl *stc = editor->GetControl();
         wxChar ch = event.GetKey();
         if ( (ch == wxT('\n')) || ( (stc->GetEOLMode() == wxSCI_EOL_CR) && (ch == wxT('\r')) ) )
-            m_pPanel->UpdateMiniStc(editor, true);
+            m_pPanel->UpdateMiniStc(editor);
     }
     else if(event.GetEventType() == wxEVT_SCI_UPDATEUI)
         m_pPanel->UpdateMiniStc(editor);
-//    else if(event.GetEventType() == wxEVT_SCI_MODIFIED)
-//    {
-//        if ( (event.GetModificationType() & wxSCI_MOD_DELETETEXT) != 0)
-//            m_pPanel->UpdateMiniStc(editor, true);
-//    }
 }
 int MiniDoc::Configure()
 {

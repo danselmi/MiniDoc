@@ -9,15 +9,14 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0);
         virtual ~MiniStyledTextCtrl();
 
-        void UpdateMiniature(cbStyledTextCtrl *stc, bool force = false);
+        void UpdateMiniature(cbStyledTextCtrl *stc);
         void UpdateConfig();
         void Init();
-        void PrepareMainView(cbStyledTextCtrl *stc);
     protected:
     private:
         void SetMarker();
-        void SetVisibleRange(int from, int to, bool force = false);
-        void MakeVisible(int fromLine, int length);
+        void DesignateVisibleRange(int from, int to);
+        void MakePositionVisible(int fromLine, int length);
 
         void SyncFoldState(cbStyledTextCtrl *stc);
 

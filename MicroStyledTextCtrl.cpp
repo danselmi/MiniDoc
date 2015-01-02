@@ -86,25 +86,18 @@ void MicroStyledTextCtrl::OnPaint(wxPaintEvent &evt)
     }
 }
 void MicroStyledTextCtrl::OnEraseBackground(wxEraseEvent &evt){}
-void MicroStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc, bool force)
+void MicroStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc)
 {
     linesInDoc_ = stc->GetLineCount();
     bgColor = stc->StyleGetBackground(wxSCI_STYLE_DEFAULT);
 
-    int oldFirstVisibleLine = firstVisibleLine;
-    int oldLastVisibleLine = lastVisibleLine;
-
     firstVisibleLine = stc->DocLineFromVisible(stc->GetFirstVisibleLine());
     lastVisibleLine = stc->DocLineFromVisible(stc->GetFirstVisibleLine()+stc->LinesOnScreen());
-
-    if ((oldFirstVisibleLine != firstVisibleLine) || (oldLastVisibleLine != lastVisibleLine))
-        force = true;
 
     visibles.clear();
     GetVisibles(stc);
 
-    //if (force)
-        Refresh();
+    Refresh();
 }
 void MicroStyledTextCtrl::GetVisibles(cbStyledTextCtrl *stc)
 {

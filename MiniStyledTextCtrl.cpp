@@ -74,10 +74,7 @@ void MiniStyledTextCtrl::Init()
     for (unsigned int i = 0 ; i < wxSCI_MAX_MARGIN ; ++i)
         SetMarginWidth(i,0);
 
-    SetZoom(-10); // smallest allowed zoom factor
-//    StyleSetSize(wxSCI_STYLE_DEFAULT, 2);
-//    for (unsigned int style = 0 ; style < wxSCI_STYLE_MAX ; ++style)
-//        StyleSetSize(style, 2);
+    SetZoom(-10); // this is the smallest allowed zoom factor
 
     SetUseHorizontalScrollBar(false);
 
@@ -149,26 +146,20 @@ void MiniStyledTextCtrl::OnMouseEnterOrLeave(wxMouseEvent& event)
 {
     event.Skip(false);
 }
-void MiniStyledTextCtrl::SetVisibleRange(int from, int length, bool force)
+void MiniStyledTextCtrl::DesignateVisibleRange(int from, int length)
 {
-    int oldVisibleFrom = visibleFrom;
-    int oldVisibleLength = visibleLength;
-
     visibleFrom = from;
     visibleLength = length;
 
-    if (force || (oldVisibleFrom != visibleFrom) || (oldVisibleLength != visibleLength))
-    {
-        SetMarker();
-        MakeVisible(from, length);
-    }
+    SetMarker();
+    MakePositionVisible(from, length);
 }
 void MiniStyledTextCtrl::UpdateConfig()
 {
     Init();
     SetMarker();
 }
-void MiniStyledTextCtrl::MakeVisible(int from, int length)
+void MiniStyledTextCtrl::MakePositionVisible(int from, int length)
 {
     ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
     bool doscroll = cfg->ReadBool(_T("/mini_doc/sync_to_main_doc"), true);
@@ -197,7 +188,7 @@ void MiniStyledTextCtrl::SetMarker()
     }
     Thaw();
 }
-void MiniStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc, bool force)
+void MiniStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc)
 {
     SyncFoldState(stc);
 
@@ -206,22 +197,13 @@ void MiniStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc, bool force)
 
     int totalVisibleLines = lastVisibleLine-firstVisibleLine;
 
-    SetVisibleRange(firstVisibleLine, totalVisibleLines, force);
-}
-
-void MiniStyledTextCtrl::PrepareMainView(cbStyledTextCtrl* stc)
-{
-    if(!stc)
-        return;
-    stc->MarkerDefine(GetOurMarkerNumber(), wxSCI_MARK_EMPTY);
+    DesignateVisibleRange(firstVisibleLine, totalVisibleLines);
 }
 
 void MiniStyledTextCtrl::SyncFoldState(cbStyledTextCtrl *stc)
 {
     return;
-    /// should we do sync the folding into the miniature?
-
-    /// doing this would also require to calculate different positions for the marker
+    /// doing this would also require to calculate different positions for the marker to designate the visible area
     for(int line = 0; line < GetLineCount() ; ++line)
         SetFoldLevel(line, stc->GetFoldLevel(line));
 }

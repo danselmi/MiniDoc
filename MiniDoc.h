@@ -50,10 +50,10 @@ class MiniDoc : public cbPlugin
         virtual void OnRelease(bool appShutDown);
 
     private:
-        void OnEditorClose(CodeBlocksEvent& event);
-        void OnEditorOpen(CodeBlocksEvent& event);
         void OnEditorActivated(CodeBlocksEvent& event);
         void OnEditorDeactivated(CodeBlocksEvent& event);
+        void OnEditorSplit(CodeBlocksEvent& event);
+        void OnEditorUnsplit(CodeBlocksEvent& event);
         void OnResize(wxSizeEvent &event);
 
         void OnViewMiniDocPanel(wxCommandEvent& event);
@@ -62,6 +62,7 @@ class MiniDoc : public cbPlugin
         void OnEditorHook(cbEditor* editor, wxScintillaEvent& event);
 
         int m_FunctorId;
+        EditorBase *currentEb_;
         MiniDocPanel *m_pPanel;
         wxMenu *m_pViewMenu;
     private:
