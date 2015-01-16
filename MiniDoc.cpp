@@ -212,10 +212,10 @@ void MiniDoc::OnResize(wxSizeEvent& event)
 
 void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)
 {
-//    static bool inOnEditHook = false;
-//    if(!inOnEditHook)
-//    {
-//        inOnEditHook = true;
+    static bool inOnEditHook = false;
+    if(!inOnEditHook)
+    {
+        inOnEditHook = true;
         if(event.GetEventType() == wxEVT_SCI_CHARADDED)
         {
             cbStyledTextCtrl *stc = editor->GetControl();
@@ -226,8 +226,8 @@ void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)
         else if(event.GetEventType() == wxEVT_SCI_UPDATEUI)
             m_pPanel->UpdateMiniStc(editor);
 
-//        inOnEditHook = false;
-//    }
+        inOnEditHook = false;
+    }
 }
 int MiniDoc::Configure()
 {
