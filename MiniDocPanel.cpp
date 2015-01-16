@@ -37,6 +37,9 @@ MiniDocPanel::MiniDocPanel(wxWindow* parent,wxWindowID id)
     ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
     bool showMini = cfg->ReadBool(_T("/mini_doc/show_mini"), true);
     bool showMicro = cfg->ReadBool(_T("/mini_doc/show_micro"), true);
+    // TODO (danselmi#1#): First improve the MiniStyledTextCtrl, later implement the MicroStyledTextCtrl
+    showMicro = false;
+    showMini = true;
     if(showMini)
     {
         miniStc_ = new MiniStyledTextCtrl(this, wxID_ANY);
