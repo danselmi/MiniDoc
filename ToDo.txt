@@ -8,7 +8,7 @@ to fix:
 
 Open points:
 A) Speed
-   it feels very slow??
+   it feels slow??
 B) Suggestions:
     - use even smaller font for larger files
     - it would be good if the space between the lines could be made smaller, so more text could be made visible.
@@ -18,12 +18,12 @@ B) Suggestions:
 C) MicroView
    - add other graphical infos from editor to MicroView
 
-D) C::B 
+D) C::B
 how to manage the usage of the indicators and markers? Is it needed?
 MiniStyledTextCtrl has to follow changes in different plugins to "mimic" cbEditors control colors.
 (incremental search and highlighter)
 Changing their configuration needs a restart of MiniDoc plugin to become colored the same.
 Any plugin can "use" any marker/indicator number.
-   
-   
+
+
 

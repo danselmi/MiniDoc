@@ -50,6 +50,9 @@ class MiniDoc : public cbPlugin
         virtual void OnRelease(bool appShutDown);
 
     private:
+
+        void OnEditorClose(CodeBlocksEvent& event);
+        void OnEditorOpen(CodeBlocksEvent& event);
         void OnEditorActivated(CodeBlocksEvent& event);
         void OnEditorDeactivated(CodeBlocksEvent& event);
         void OnEditorSplit(CodeBlocksEvent& event);
