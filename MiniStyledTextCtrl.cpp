@@ -27,12 +27,12 @@ END_EVENT_TABLE()
 
 
 MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint& pos, const wxSize& size, long style):
-    cbStyledTextCtrl(pParent, id, pos, size, style)
+cbStyledTextCtrl(pParent, id, pos, size, style),
+cfgMan_(Manager::Get()->GetConfigManager(_T("editor")))
 {
     Init();
 
-    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
-    if (cfg->ReadBool(_T("/highlight_occurrence/enabled"), true))
+    if (cfgMan_->ReadBool(_T("/highlight_occurrence/enabled"), true))
     {
         const int theIndicator = 10;
         wxColour highlightColour(Manager::Get()->GetColourManager()->GetColour(wxT("editor_highlight_occurrence")));
@@ -52,14 +52,14 @@ MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint&
 
     const int theFindFoudIndicator = 21;
     IndicatorSetStyle(theFindFoudIndicator, wxSCI_INDIC_HIGHLIGHT);
-    IndicatorSetForeground(theFindFoudIndicator, wxColour(cfg->ReadColour(_T("/incremental_search/text_found_colour"), wxColour(160, 32, 240))) );
+    IndicatorSetForeground(theFindFoudIndicator, wxColour(cfgMan_->ReadColour(_T("/incremental_search/text_found_colour"), wxColour(160, 32, 240))) );
 #ifndef wxHAVE_RAW_BITMAP
     IndicatorSetUnder(theFindFoudIndicator,true);
 #endif
 
     const int theFindHighlightIndicator = 22;
     IndicatorSetStyle(theFindHighlightIndicator, wxSCI_INDIC_HIGHLIGHT);
-    IndicatorSetForeground(theFindHighlightIndicator, wxColour(cfg->ReadColour(_T("/incremental_search/highlight_colour"), wxColour(255, 165, 0))) );
+    IndicatorSetForeground(theFindHighlightIndicator, wxColour(cfgMan_->ReadColour(_T("/incremental_search/highlight_colour"), wxColour(255, 165, 0))) );
 #ifndef wxHAVE_RAW_BITMAP
     IndicatorSetUnder(theFindHighlightIndicator,true);
 #endif
@@ -68,8 +68,6 @@ MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint&
 
 void MiniStyledTextCtrl::Init()
 {
-    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
-
     SetMargins(0,0);
     for (unsigned int i = 0 ; i < wxSCI_MAX_MARGIN ; ++i)
         SetMarginWidth(i,0);
@@ -78,7 +76,7 @@ void MiniStyledTextCtrl::Init()
 
     SetUseHorizontalScrollBar(false);
 
-    bool showVertScrollbar = cfg->ReadBool(_T("/mini_doc/show_vertical_scrollbar"), true);
+    bool showVertScrollbar = cfgMan_->ReadBool(_T("/mini_doc/show_vertical_scrollbar"), true);
     SetUseVerticalScrollBar(showVertScrollbar);
 
     wxColor color = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
@@ -161,15 +159,13 @@ void MiniStyledTextCtrl::UpdateConfig()
 }
 void MiniStyledTextCtrl::MakePositionVisible(int from, int length)
 {
-    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
-    bool doscroll = cfg->ReadBool(_T("/mini_doc/sync_to_main_doc"), true);
+    bool doscroll = cfgMan_->ReadBool(_T("/mini_doc/sync_to_main_doc"), true);
     if (doscroll)
         ScrollToLine(from - (LinesOnScreen()-length)/2);
 }
 void MiniStyledTextCtrl::SetMarker()
 {
-    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
-    bool inverse = cfg->ReadBool(_T("/mini_doc/inverse_designator"), false);
+    bool inverse = cfgMan_->ReadBool(_T("/mini_doc/inverse_designator"), false);
     Freeze();
     wxColor color = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
     MarkerDeleteAll(GetOurMarkerNumber());

@@ -3,6 +3,8 @@
 
 #include "cbstyledtextctrl.h"
 
+class ConfigManager;
+
 class MiniStyledTextCtrl: public cbStyledTextCtrl
 {
     public:
@@ -32,6 +34,8 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         int visibleFrom, visibleLength;
 
         const int GetOurMarkerNumber()const;
+
+        ConfigManager* cfgMan_;
     private:
         DECLARE_EVENT_TABLE();
 };
