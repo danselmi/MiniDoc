@@ -37,6 +37,10 @@ class MicroStyledTextCtrl: public wxPanel
         int firstVisibleLine;
         int lastVisibleLine;
     private:
+        bool inverseDesignator_;
+        wxColor markColor_;
+        bool highlightOccurrencesEnabled_;
+    private:
         DECLARE_EVENT_TABLE();
 };
 

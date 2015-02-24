@@ -34,8 +34,11 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         int visibleFrom, visibleLength;
 
         const int GetOurMarkerNumber()const;
-
-        ConfigManager* cfgMan_;
+    private:
+        //ConfigManager* cfgMan_;
+        wxColor backgroundColour_;
+        bool inverseMarker_;
+        bool doScrollToPosition_;
     private:
         DECLARE_EVENT_TABLE();
 };

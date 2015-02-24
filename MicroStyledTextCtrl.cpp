@@ -24,7 +24,11 @@ MicroStyledTextCtrl::MicroStyledTextCtrl(wxWindow* pParent, int id):
 
 void MicroStyledTextCtrl::Init()
 {
+    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+    inverseDesignator_ = cfg->ReadBool(_T("/mini_doc/inverse_designator"), false);
     bgColor = *wxWHITE;
+    markColor_ = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
+    highlightOccurrencesEnabled_ = cfg->ReadBool(_T("/highlight_occurrence/enabled"), true);
 }
 
 MicroStyledTextCtrl::~MicroStyledTextCtrl()
@@ -42,7 +46,6 @@ void MicroStyledTextCtrl::OnPaint(wxPaintEvent &evt)
     dc.DrawRectangle(wxPoint(0,0), sz);
     if ( getHeight() >= linesInDoc_ )
     {
-        //wxColor wxCtrlBgColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);	//Window background colour.
         wxColor wxCtrlBgColor = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
         dc.SetPen(wxPen(wxCtrlBgColor));
         dc.SetBrush(wxBrush(wxCtrlBgColor));
@@ -51,10 +54,7 @@ void MicroStyledTextCtrl::OnPaint(wxPaintEvent &evt)
     if(linesInDoc_ == 0)
         return;
 
-    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
-    bool inverse = cfg->ReadBool(_T("/mini_doc/inverse_designator"), false);
-    wxColor markColor = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
-    wxColor brushColor(markColor.Red(), markColor.Green(), markColor.Blue(), 20);
+    wxColor brushColor(markColor_.Red(), markColor_.Green(), markColor_.Blue(), 20);
     dc.SetPen(wxPen(brushColor));
     dc.SetBrush(wxBrush(brushColor));
     int y1 = firstVisibleLine, y2 = lastVisibleLine, y3 = linesInDoc_;
@@ -64,7 +64,7 @@ void MicroStyledTextCtrl::OnPaint(wxPaintEvent &evt)
         y2 = y2 * sz.y/linesInDoc_;
         y3 = y3 * sz.y/linesInDoc_;
     }
-    if (inverse)
+    if (inverseDesignator_)
     {
         dc.DrawRectangle(0, y1, sz.x, y2-y1);
     }
@@ -102,7 +102,8 @@ void MicroStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc)
 void MicroStyledTextCtrl::GetVisibles(cbStyledTextCtrl *stc)
 {
     ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
-    if (cfg->ReadBool(_T("/highlight_occurrence/enabled"), true))
+
+    if (highlightOccurrencesEnabled_)
     {
         const int theIndicator = 10;
         wxColor color = Manager::Get()->GetColourManager()->GetColour(wxT("editor_highlight_occurrence"));
