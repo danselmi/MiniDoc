@@ -20,23 +20,15 @@
 #include "MiniDocPanel.h"
 
 //(*InternalHeaders(MiniDocConfigPanel)
-
-#include <wx/xrc/xmlres.h>
-
-#include <wx/stattext.h>
-
-#include <wx/checkbox.h>
-
-#include <wx/radiobut.h>
-
-#include <wx/choice.h>
-
 #include <wx/button.h>
-
+#include <wx/checkbox.h>
+#include <wx/choice.h>
+#include <wx/radiobut.h>
+#include <wx/stattext.h>
+#include <wx/xrc/xmlres.h>
 //*)
 
 //(*IdInit(MiniDocConfigPanel)
-
 //*)
 
 BEGIN_EVENT_TABLE(MiniDocConfigPanel,wxPanel)
@@ -53,32 +45,19 @@ MiniDocConfigPanel::MiniDocConfigPanel(wxWindow* parent, MiniDocPanel *panel)
 void MiniDocConfigPanel::BuildContent(wxWindow* parent)
 {
 	//(*Initialize(MiniDocConfigPanel)
-
 	wxXmlResource::Get()->LoadObject(this,parent,_T("MiniDocConfigPanel"),_T("wxPanel"));
-
 	StaticText1 = (wxStaticText*)FindWindow(XRCID("ID_STATICTEXT1"));
-
 	ColorSelButton = (wxButton*)FindWindow(XRCID("ID_BUTTON1"));
-
 	CheckBox1 = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX1"));
-
 	CheckBox2 = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX2"));
-
 	CheckBox3 = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX3"));
-
 	RadioButton1 = (wxRadioButton*)FindWindow(XRCID("ID_RADIOBUTTON1"));
-
 	RadioButton2 = (wxRadioButton*)FindWindow(XRCID("ID_RADIOBUTTON2"));
-
 	RadioButton3 = (wxRadioButton*)FindWindow(XRCID("ID_RADIOBUTTON3"));
-
 	StaticText2 = (wxStaticText*)FindWindow(XRCID("ID_STATICTEXT2"));
-
 	Choice1 = (wxChoice*)FindWindow(XRCID("ID_CHOICE1"));
 
-
 	Connect(XRCID("ID_BUTTON1"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MiniDocConfigPanel::OnColorSelButtonClick);
-
 	//*)
 
     ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
@@ -100,6 +79,11 @@ void MiniDocConfigPanel::BuildContent(wxWindow* parent)
     RadioButton1->SetValue(showMini && !showMicro);
     RadioButton2->SetValue(!showMini && showMicro);
     RadioButton3->SetValue(showMini && showMicro);
+
+    RadioButton1->Hide();
+    RadioButton2->Hide();
+    RadioButton3->Hide();
+
 }
 
 MiniDocConfigPanel::~MiniDocConfigPanel()
@@ -157,6 +141,7 @@ wxString MiniDocConfigPanel::GetTitle() const
 {
     return _("MiniDoc");
 }
+
 wxString MiniDocConfigPanel::GetBitmapBaseName() const
 {
     return _T("MiniDoc");

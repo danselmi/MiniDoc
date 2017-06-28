@@ -3,11 +3,11 @@
 
 //(*Headers(MiniDocConfigPanel)
 #include <wx/panel.h>
+class wxButton;
 class wxCheckBox;
+class wxChoice;
 class wxRadioButton;
 class wxStaticText;
-class wxButton;
-class wxChoice;
 //*)
 
 #include <configurationpanel.h>
@@ -22,16 +22,16 @@ class MiniDocConfigPanel: public cbConfigurationPanel
 		virtual ~MiniDocConfigPanel();
 
 		//(*Declarations(MiniDocConfigPanel)
-		wxRadioButton* RadioButton1;
-		wxStaticText* StaticText2;
-		wxRadioButton* RadioButton2;
 		wxButton* ColorSelButton;
-		wxCheckBox* CheckBox3;
-		wxCheckBox* CheckBox2;
-		wxStaticText* StaticText1;
-		wxRadioButton* RadioButton3;
 		wxCheckBox* CheckBox1;
+		wxCheckBox* CheckBox2;
+		wxCheckBox* CheckBox3;
 		wxChoice* Choice1;
+		wxRadioButton* RadioButton1;
+		wxRadioButton* RadioButton2;
+		wxRadioButton* RadioButton3;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText2;
 		//*)
 
         /// @return the panel's title.
