@@ -8,7 +8,7 @@
 		<Build>
 			<Target title="plugin">
 				<Option output="../../../devel30/share/codeblocks/plugins/MiniDoc" prefix_auto="1" extension_auto="1" />
-				<Option object_output="..\..\..\.objs30\plugins\contrib\MiniDoc" />
+				<Option object_output="../../../.objs30/plugins/contrib/MiniDoc" />
 				<Option type="3" />
 				<Option compiler="gcc" />
 				<Option parameters="--debug-log --multiple-instance -na -ns -nd" />
@@ -29,6 +29,7 @@
 					<Add option="-DWX_PRECOMP" />
 					<Add option="-DwxUSE_UNICODE" />
 					<Add directory="../../../include" />
+					<Add directory="../../../include/tinyxml" />
 					<Add directory="../../../sdk/wxscintilla/include" />
 					<Add directory="$(#wx30.include)" />
 					<Add directory="$(#wx30.lib)/gcc_dll/mswu" />
