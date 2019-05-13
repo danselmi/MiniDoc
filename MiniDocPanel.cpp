@@ -43,13 +43,13 @@ MiniDocPanel::MiniDocPanel(wxWindow* parent,wxWindowID id)
     if(showMini)
     {
         miniStc_ = new MiniStyledTextCtrl(this, wxID_ANY);
-        boxSizer->Add(miniStc_, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+        boxSizer->Add(miniStc_, 1, wxALL|wxEXPAND, 5);
     }
 
     if(showMicro)
     {
         microStc_ = new MicroStyledTextCtrl(this, wxID_ANY);
-        boxSizer->Add(microStc_, showMini?0:1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+        boxSizer->Add(microStc_, showMini?0:1, wxALL|wxEXPAND, 5);
     }
 
     SetSizer(boxSizer);
@@ -90,7 +90,9 @@ void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
         {
             miniStc_->SetDocPointer(ed->GetControl()->GetDocPointer());
             EditorColourSet *ecs = Manager::Get()->GetEditorManager()->GetColourSet();
-            ecs->Apply(ed->GetLanguage(), miniStc_);
+            const wxString lang = ed->GetLanguage();
+            const bool isC = lang == "C/C++";
+            ecs->Apply(lang, miniStc_, isC, true);
 
             miniStc_->UpdateMiniature(ed->GetControl());
         }

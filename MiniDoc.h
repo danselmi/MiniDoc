@@ -65,8 +65,8 @@ class MiniDoc : public cbPlugin
         void OnEditorHook(cbEditor* editor, wxScintillaEvent& event);
 
         int m_FunctorId;
-        EditorBase *currentEb_;
         MiniDocPanel *m_pPanel;
+        EditorBase *currentEb_;
         wxMenu *m_pViewMenu;
     private:
         DECLARE_EVENT_TABLE();

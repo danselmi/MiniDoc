@@ -171,7 +171,7 @@ void MicroStyledTextCtrl::OnMouseDown(wxMouseEvent& event)
 
 int MicroStyledTextCtrl::getHeight()
 {
-    GetSize().GetY();
+    return GetSize().GetY();
 }
 
 int MicroStyledTextCtrl::GetLineFromPosition(const wxPoint &pt)
