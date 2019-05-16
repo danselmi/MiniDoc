@@ -51,4 +51,4 @@ typedef void (wxEvtHandler::*MiniStyledTextCtrlLineClickedEventFunction)(MiniSty
 
 
 
-#endif // MINI_STYLED_TEXT_CTRL_EVENT_H
+#endif

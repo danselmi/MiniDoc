@@ -21,7 +21,7 @@ class MiniDocPanel: public wxPanel
 {
     public:
         MiniDocPanel(wxWindow* parent,wxWindowID id=wxID_ANY);
-        virtual ~MiniDocPanel();
+        virtual ~MiniDocPanel(){}
 
         void ShowMiniatureOf(EditorBase *eb = NULL);
         void UpdateMiniStc(EditorBase *eb);

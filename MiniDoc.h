@@ -72,4 +72,4 @@ class MiniDoc : public cbPlugin
         DECLARE_EVENT_TABLE();
 };
 
-#endif // MiniDoc_H_INCLUDED
+#endif

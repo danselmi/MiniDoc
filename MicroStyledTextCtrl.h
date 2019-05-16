@@ -46,4 +46,4 @@ class MicroStyledTextCtrl: public wxPanel
 
 
 
-#endif // MICRO_STYLED_TEXT_CTRL_H
+#endif

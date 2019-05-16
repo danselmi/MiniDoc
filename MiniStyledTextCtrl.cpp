@@ -27,7 +27,7 @@ END_EVENT_TABLE()
 
 
 MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint& pos, const wxSize& size, long style):
-cbStyledTextCtrl(pParent, id, pos, size, style)
+    cbStyledTextCtrl(pParent, id, pos, size, style)
 {
     Init();
     ConfigManager *cfg = Manager::Get()->GetConfigManager(_T("editor"));
@@ -91,24 +91,24 @@ void MiniStyledTextCtrl::Init()
     MarkerSetAlpha(GetOurMarkerNumber(), alpha);
 }
 
-
-MiniStyledTextCtrl::~MiniStyledTextCtrl()
-{
-    //dtor
-}
-
 void MiniStyledTextCtrl::OnKey(wxKeyEvent& event)
-{   // ignore key press events
+{
+    // ignore key press events
     event.Skip(false);
 }
+
 void MiniStyledTextCtrl::OnMousWheel(wxMouseEvent& event)
-{   //disable zoom changes
+{
+    //disable zoom changes
     event.Skip(!event.m_controlDown);
 }
+
 void MiniStyledTextCtrl::OnMouseDClick(wxMouseEvent& event)
-{   // disable text selection on double click
+{
+    // disable text selection on double click
     event.Skip(false);
 }
+
 void MiniStyledTextCtrl::OnMouseUpOrDown(wxMouseEvent& event)
 {
     if( event.ButtonDown(wxMOUSE_BTN_LEFT) )
@@ -125,6 +125,7 @@ void MiniStyledTextCtrl::OnMouseUpOrDown(wxMouseEvent& event)
     }
     event.Skip(false);
 }
+
 void MiniStyledTextCtrl::OnMouseMove(wxMouseEvent& event)
 {
     if(event.ButtonIsDown(wxMOUSE_BTN_LEFT))
@@ -135,6 +136,7 @@ void MiniStyledTextCtrl::OnMouseMove(wxMouseEvent& event)
         wxPostEvent(this, evt);
     }
 }
+
 int MiniStyledTextCtrl::GetLineFromPosition(const wxPoint &pt)
 {
     int line = GetFirstVisibleLine();
@@ -148,6 +150,7 @@ void MiniStyledTextCtrl::OnMouseEnterOrLeave(wxMouseEvent& event)
 {
     event.Skip(false);
 }
+
 void MiniStyledTextCtrl::DesignateVisibleRange(int from, int length)
 {
     visibleFrom = from;
@@ -156,11 +159,13 @@ void MiniStyledTextCtrl::DesignateVisibleRange(int from, int length)
     SetMarker();
     MakePositionVisible(from, length);
 }
+
 void MiniStyledTextCtrl::UpdateConfig()
 {
     Init();
     SetMarker();
 }
+
 void MiniStyledTextCtrl::MakePositionVisible(int from, int length)
 {
     if (doScrollToPosition_)
@@ -186,6 +191,7 @@ void MiniStyledTextCtrl::SetMarker()
     }
     Thaw();
 }
+
 void MiniStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc)
 {
     SyncFoldState(stc);
@@ -205,9 +211,8 @@ void MiniStyledTextCtrl::SyncFoldState(cbStyledTextCtrl *stc)
     for(int line = 0; line < GetLineCount() ; ++line)
         SetFoldLevel(line, stc->GetFoldLevel(line));
 }
+
 const int MiniStyledTextCtrl::GetOurMarkerNumber()const
 {
     return 8;
 }
-
-

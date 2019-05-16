@@ -9,7 +9,7 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
 {
     public:
         MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0);
-        virtual ~MiniStyledTextCtrl();
+        virtual ~MiniStyledTextCtrl(){}
 
         void UpdateMiniature(cbStyledTextCtrl *stc);
         void UpdateConfig();
@@ -43,4 +43,4 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         DECLARE_EVENT_TABLE();
 };
 
-#endif // MINI_STYLED_TEXT_CTRL_H
+#endif

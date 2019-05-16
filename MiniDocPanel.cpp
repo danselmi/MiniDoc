@@ -57,9 +57,6 @@ MiniDocPanel::MiniDocPanel(wxWindow* parent,wxWindowID id)
     boxSizer->SetSizeHints(this);
 }
 
-MiniDocPanel::~MiniDocPanel()
-{
-}
 void MiniDocPanel::UpdateConfig()
 {
     if(miniStc_)
@@ -67,7 +64,7 @@ void MiniDocPanel::UpdateConfig()
     if(microStc_)
         microStc_->UpdateConfig();
 }
-//void MiniDocPanel::UpdateMiniStc(cbStyledTextCtrl *stc)
+
 void MiniDocPanel::UpdateMiniStc(EditorBase *eb)
 {
     if(!eb)
@@ -82,6 +79,7 @@ void MiniDocPanel::UpdateMiniStc(EditorBase *eb)
             microStc_->UpdateMiniature(stc);
     }
 }
+
 void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
 {
     if(ed)
@@ -107,7 +105,6 @@ void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
             microStc_->AssociateNoDoc();
     }
 }
-
 
 void MiniDocPanel::ShowMiniatureOf(EditorBase *eb)
 {
@@ -144,34 +141,32 @@ void MiniDocPanel::OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event)
     int line = event.GetLine();
 
     cbEditor *ed = dynamic_cast<cbEditor*>(Manager::Get()->GetEditorManager()->GetActiveEditor());
-    if(ed)
-    {
-        cbStyledTextCtrl *stc = ed->GetControl();
-        if (stc)
-        {
-            ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
-            int k;
-                /*k = 0; //no adjustment of position
-                k = 3; //selected line 1/3 into screen
-                k = 4; //selected line 1/4 into screen
-                k = 2; //selected line on center
-                k = 1; //selected line on top*/
-            k = cfg->ReadInt(_T("mini_doc/pos_of_main"), 2);
-            switch (k)
-            {
-            case 4:
-            case 3:
-            case 2:
-                stc->ScrollToLine(line - stc->LinesOnScreen()/k);
-                break;
-            case 1:
-                stc->ScrollToLine(line);
-                break;
-            case 0:
-            default:
-                break;
-            }
+    if(!ed)
+        return;
 
+    if(cbStyledTextCtrl *stc = ed->GetControl())
+    {
+        ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
+        int k;
+            /*k = 0; //no adjustment of position
+            k = 3; //selected line 1/3 into screen
+            k = 4; //selected line 1/4 into screen
+            k = 2; //selected line on center
+            k = 1; //selected line on top*/
+        k = cfg->ReadInt(_T("mini_doc/pos_of_main"), 2);
+        switch (k)
+        {
+        case 4:
+        case 3:
+        case 2:
+            stc->ScrollToLine(line - stc->LinesOnScreen()/k);
+            break;
+        case 1:
+            stc->ScrollToLine(line);
+            break;
+        case 0:
+        default:
+            break;
         }
     }
 }
