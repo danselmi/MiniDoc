@@ -10,8 +10,6 @@
 #include "MiniDocPanel.h"
 #include "MiniDocConfigPanel.h"
 
-// Register the plugin with Code::Blocks.
-// We are using an anonymous namespace so we don't litter the global one.
 namespace
 {
     PluginRegistrant<MiniDoc> reg(_T("MiniDoc"));
@@ -23,11 +21,8 @@ namespace
 // events handling
 BEGIN_EVENT_TABLE(MiniDoc, cbPlugin)
     // add any events you want to handle here
-
     EVT_MENU(idViewMiniDocPanel,      MiniDoc::OnViewMiniDocPanel)
     EVT_UPDATE_UI(idViewMiniDocPanel, MiniDoc::OnUpdateViewMenu)
-
-
 END_EVENT_TABLE()
 
 // constructor
@@ -42,11 +37,6 @@ MiniDoc::MiniDoc():
         NotifyMissingFile(_T("MiniDoc.zip"));
 }
 
-// destructor
-MiniDoc::~MiniDoc()
-{
-}
-
 void MiniDoc::OnAttach()
 {
     // do whatever initialization you need for your plugin
@@ -59,7 +49,6 @@ void MiniDoc::OnAttach()
     ColourManager* cm = Manager::Get()->GetColourManager();
     cm->RegisterColour(_("MiniDoc"), _("Background"), wxT("minidoc_background"), *wxLIGHT_GREY  );
 
-
     m_pPanel = new MiniDocPanel(Manager::Get()->GetAppWindow());
     if(!m_pPanel)
     {
@@ -69,7 +58,6 @@ void MiniDoc::OnAttach()
 
     EditorHooks::HookFunctorBase *editor_hook = new EditorHooks::HookFunctor<MiniDoc>(this, &MiniDoc::OnEditorHook);
     m_FunctorId = EditorHooks::RegisterHook( editor_hook );
-
 
     // add the MiniDoc-panel to the docking system
     CodeBlocksDockEvent dockevt(cbEVT_ADD_DOCK_WINDOW);
@@ -82,7 +70,6 @@ void MiniDoc::OnAttach()
     dockevt.dockSide = CodeBlocksDockEvent::dsRight;
     dockevt.stretch = true;
     Manager::Get()->ProcessEvent(dockevt);
-
 
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_OPEN,        new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorOpen));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_CLOSE,       new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorClose));
@@ -128,6 +115,7 @@ void MiniDoc::OnRelease(bool appShutDown)
         currentEb_ = NULL;
     }
 }
+
 void MiniDoc::OnEditorClose(CodeBlocksEvent& event)
 {
     if (m_pPanel && IsAttached())
@@ -143,9 +131,11 @@ void MiniDoc::OnEditorClose(CodeBlocksEvent& event)
         }
     }
 }
+
 void MiniDoc::OnEditorOpen(CodeBlocksEvent& event)
 {
 }
+
 void MiniDoc::OnEditorActivated(CodeBlocksEvent& event)
 {
     if (m_pPanel && IsAttached())
@@ -161,6 +151,7 @@ void MiniDoc::OnEditorActivated(CodeBlocksEvent& event)
         }
     }
 }
+
 void MiniDoc::OnEditorDeactivated(CodeBlocksEvent& event)
 {
     if (m_pPanel && IsAttached())
@@ -229,6 +220,7 @@ void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)
         inOnEditHook = false;
     }
 }
+
 int MiniDoc::Configure()
 {
     //create and display the configuration dialog for your plugin
@@ -279,13 +271,13 @@ bool MiniDoc::BuildToolBar(wxToolBar* toolBar)
     return false;
 }
 
-
 void MiniDoc::OnViewMiniDocPanel(wxCommandEvent& event)
 {
     CodeBlocksDockEvent evt(event.IsChecked() ? cbEVT_SHOW_DOCK_WINDOW : cbEVT_HIDE_DOCK_WINDOW);
     evt.pWindow = m_pPanel;
     Manager::Get()->ProcessEvent(evt);
 }
+
 void MiniDoc::OnUpdateViewMenu(wxUpdateUIEvent &event)
 {
     if (m_pViewMenu)
@@ -297,8 +289,8 @@ void MiniDoc::OnUpdateViewMenu(wxUpdateUIEvent &event)
     event.Skip();
 }
 
-
 cbConfigurationPanel* MiniDoc::GetConfigurationPanel(wxWindow* parent)
 {
     return new MiniDocConfigPanel(parent, m_pPanel);
 }
+
