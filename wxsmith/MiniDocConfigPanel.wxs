@@ -6,13 +6,10 @@
 		<object name="ID_BUTTON1" class="wxButton" variable="ColorSelButton" member="yes">
 			<handler function="OnColorSelButtonClick" entry="EVT_BUTTON" />
 		</object>
-		<object name="ID_CHECKBOX1" class="wxCheckBox" variable="CheckBox1" member="yes" />
-		<object name="ID_CHECKBOX2" class="wxCheckBox" variable="CheckBox2" member="yes" />
-		<object name="ID_CHECKBOX3" class="wxCheckBox" variable="CheckBox3" member="yes" />
-		<object name="ID_RADIOBUTTON1" class="wxRadioButton" variable="RadioButton1" member="yes" />
-		<object name="ID_RADIOBUTTON2" class="wxRadioButton" variable="RadioButton2" member="yes" />
-		<object name="ID_RADIOBUTTON3" class="wxRadioButton" variable="RadioButton3" member="yes" />
+		<object name="ID_CHECKBOX_SYNC_POS" class="wxCheckBox" variable="syncPositionCheckBox" member="yes" />
+		<object name="ID_CHECKBOX_INVERSE_DES" class="wxCheckBox" variable="inverseDesignatorCheckBox" member="yes" />
+		<object name="ID_CHECKBOX_SHOW_SCROLLBAR" class="wxCheckBox" variable="ShowScrollbar" member="yes" />
 		<object name="ID_STATICTEXT2" class="wxStaticText" variable="StaticText2" member="yes" />
-		<object name="ID_CHOICE1" class="wxChoice" variable="Choice1" member="yes" />
+		<object name="ID_CHOICE1" class="wxChoice" variable="adjustPositionChoice" member="yes" />
 	</resource_extra>
 </wxsmith>

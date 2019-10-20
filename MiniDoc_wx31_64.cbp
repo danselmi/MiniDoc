@@ -57,8 +57,6 @@
 		<VirtualTargets>
 			<Add alias="All" targets="plugin;" />
 		</VirtualTargets>
-		<Unit filename="MicroStyledTextCtrl.cpp" />
-		<Unit filename="MicroStyledTextCtrl.h" />
 		<Unit filename="MiniDoc.cpp" />
 		<Unit filename="MiniDoc.h" />
 		<Unit filename="MiniDocConfigPanel.cpp" />

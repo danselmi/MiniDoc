@@ -6,7 +6,6 @@
 class wxButton;
 class wxCheckBox;
 class wxChoice;
-class wxRadioButton;
 class wxStaticText;
 //*)
 
@@ -23,13 +22,10 @@ class MiniDocConfigPanel: public cbConfigurationPanel
 
 		//(*Declarations(MiniDocConfigPanel)
 		wxButton* ColorSelButton;
-		wxCheckBox* CheckBox1;
-		wxCheckBox* CheckBox2;
-		wxCheckBox* CheckBox3;
-		wxChoice* Choice1;
-		wxRadioButton* RadioButton1;
-		wxRadioButton* RadioButton2;
-		wxRadioButton* RadioButton3;
+		wxCheckBox* ShowScrollbar;
+		wxCheckBox* inverseDesignatorCheckBox;
+		wxCheckBox* syncPositionCheckBox;
+		wxChoice* adjustPositionChoice;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText2;
 		//*)
@@ -41,7 +37,7 @@ class MiniDocConfigPanel: public cbConfigurationPanel
         /// Called when the user chooses to apply the configuration.
         virtual void OnApply();
         /// Called when the user chooses to cancel the configuration.
-        virtual void OnCancel();
+        virtual void OnCancel(){}
 
 
 	protected:

@@ -24,34 +24,14 @@ BEGIN_EVENT_TABLE(MiniDocPanel, wxPanel)
     EVT_MINI_STYLED_TEXT_CTRL_COMMAND(wxID_ANY, MiniDocPanel::OnMiniStcLineClick)
 END_EVENT_TABLE()
 
-MiniDocPanel::MiniDocPanel(wxWindow* parent,wxWindowID id)
+MiniDocPanel::MiniDocPanel(wxWindow* parent, wxWindowID id):
+    wxPanel(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("id")),
+    miniStc_(NULL)
 {
-    miniStc_ = NULL;
-    microStc_ = NULL;
     wxBoxSizer* boxSizer;
-
-    Create(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("id"));
-
     boxSizer = new wxBoxSizer(wxHORIZONTAL);
-
-    ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
-    bool showMini = cfg->ReadBool(_T("/mini_doc/show_mini"), true);
-    bool showMicro = cfg->ReadBool(_T("/mini_doc/show_micro"), true);
-    // TODO (danselmi#1#): First improve the MiniStyledTextCtrl, later implement the MicroStyledTextCtrl
-    showMicro = false;
-    showMini = true;
-    if(showMini)
-    {
-        miniStc_ = new MiniStyledTextCtrl(this, wxID_ANY);
-        boxSizer->Add(miniStc_, 1, wxALL|wxEXPAND, 5);
-    }
-
-    if(showMicro)
-    {
-        microStc_ = new MicroStyledTextCtrl(this, wxID_ANY);
-        boxSizer->Add(microStc_, showMini?0:1, wxALL|wxEXPAND, 5);
-    }
-
+    miniStc_ = new MiniStyledTextCtrl(this, wxID_ANY);
+    boxSizer->Add(miniStc_, 1, wxALL|wxEXPAND, 5);
     SetSizer(boxSizer);
     boxSizer->Fit(this);
     boxSizer->SetSizeHints(this);
@@ -61,8 +41,6 @@ void MiniDocPanel::UpdateConfig()
 {
     if(miniStc_)
         miniStc_->UpdateConfig();
-    if(microStc_)
-        microStc_->UpdateConfig();
 }
 
 void MiniDocPanel::UpdateMiniStc(EditorBase *eb)
@@ -75,8 +53,6 @@ void MiniDocPanel::UpdateMiniStc(EditorBase *eb)
 
         if(miniStc_)
             miniStc_->UpdateMiniature(stc);
-        if(microStc_)
-            microStc_->UpdateMiniature(stc);
     }
 }
 
@@ -94,15 +70,11 @@ void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
 
             miniStc_->UpdateMiniature(ed->GetControl());
         }
-        if(microStc_)
-            microStc_->UpdateMiniature(ed->GetControl());
     }
     else
     {
         if(miniStc_)
             miniStc_->SetDocPointer(NULL);
-        if(microStc_)
-            microStc_->AssociateNoDoc();
     }
 }
 
@@ -132,8 +104,6 @@ void MiniDocPanel::ShowMiniatureOf(EditorBase *eb)
         str = _T("No Doc open");
         ChangeMiniStcDoc(NULL);
     }
-
-    //Manager::Get()->GetLogManager()->Log(_T("MiniDoc: ") + str);
 }
 
 void MiniDocPanel::OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event)

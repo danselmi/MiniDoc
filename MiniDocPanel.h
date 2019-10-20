@@ -11,7 +11,6 @@
 #include <wx/panel.h>
 
 #include "MiniStyledTextCtrl.h"
-#include "MicroStyledTextCtrl.h"
 #include "MiniStyledTextCtrlEvent.h"
 
 class EditorBase;
@@ -33,7 +32,6 @@ class MiniDocPanel: public wxPanel
         void ChangeMiniStcDoc(cbEditor *ed);
 
         MiniStyledTextCtrl *miniStc_;
-        MicroStyledTextCtrl *microStc_;
 
     private:
         DECLARE_EVENT_TABLE()
