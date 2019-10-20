@@ -20,8 +20,6 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         void DesignateVisibleRange(int from, int to);
         void MakePositionVisible(int fromLine, int length);
 
-        void SyncFoldState(cbStyledTextCtrl *stc);
-
         void OnKey(wxKeyEvent& event);
         void OnMousWheel(wxMouseEvent& event);
         void OnMouseUpOrDown(wxMouseEvent& event);
@@ -31,12 +29,12 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
 
         int GetLineFromPosition(const wxPoint &pt);
 
-        int visibleFrom, visibleLength;
+        int visibleFrom_, visibleLength_;
 
         const int GetOurMarkerNumber()const;
     private:
-        //ConfigManager* cfgMan_;
         wxColor backgroundColour_;
+        bool showDesignator_;
         bool inverseMarker_;
         bool doScrollToPosition_;
     private:

@@ -7,6 +7,9 @@
 			<handler function="OnColorSelButtonClick" entry="EVT_BUTTON" />
 		</object>
 		<object name="ID_CHECKBOX_SYNC_POS" class="wxCheckBox" variable="syncPositionCheckBox" member="yes" />
+		<object name="ID_CHECKBOX_SHOW_DESIGNATOR" class="wxCheckBox" variable="showDesignatorCheckBox" member="yes">
+			<handler function="OnShowDesignator" entry="EVT_CHECKBOX" />
+		</object>
 		<object name="ID_CHECKBOX_INVERSE_DES" class="wxCheckBox" variable="inverseDesignatorCheckBox" member="yes" />
 		<object name="ID_CHECKBOX_SHOW_SCROLLBAR" class="wxCheckBox" variable="showScrollbarCheckBox" member="yes" />
 		<object name="ID_STATICTEXT2" class="wxStaticText" variable="StaticText2" member="yes" />

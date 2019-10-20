@@ -23,7 +23,7 @@ class MiniDocPanel: public wxPanel
         virtual ~MiniDocPanel(){}
 
         void ShowMiniatureOf(EditorBase *eb = NULL);
-        void UpdateMiniStc(EditorBase *eb);
+        void Update(EditorBase *eb);
         void UpdateConfig();
 
     protected:

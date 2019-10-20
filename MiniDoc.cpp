@@ -71,7 +71,7 @@ void MiniDoc::OnAttach()
     dockevt.stretch = true;
     Manager::Get()->ProcessEvent(dockevt);
 
-    Manager::Get()->RegisterEventSink(cbEVT_EDITOR_OPEN,        new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorOpen));
+    //Manager::Get()->RegisterEventSink(cbEVT_EDITOR_OPEN,        new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorOpen));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_CLOSE,       new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorClose));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_ACTIVATED,   new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorActivated));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_DEACTIVATED, new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorDeactivated));
@@ -130,10 +130,6 @@ void MiniDoc::OnEditorClose(CodeBlocksEvent& event)
                 stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
         }
     }
-}
-
-void MiniDoc::OnEditorOpen(CodeBlocksEvent& event)
-{
 }
 
 void MiniDoc::OnEditorActivated(CodeBlocksEvent& event)
@@ -196,8 +192,7 @@ void MiniDoc::OnEditorSplit(CodeBlocksEvent& event)
 
 void MiniDoc::OnResize(wxSizeEvent& event)
 {
-    //cbStyledTextCtrl *stc = (cbStyledTextCtrl*)event.GetEventObject();
-    m_pPanel->UpdateMiniStc(currentEb_);
+    m_pPanel->Update(currentEb_);
     event.Skip();
 }
 
@@ -207,15 +202,8 @@ void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)
     if(!inOnEditHook)
     {
         inOnEditHook = true;
-        if(event.GetEventType() == wxEVT_SCI_CHARADDED)
-        {
-            cbStyledTextCtrl *stc = editor->GetControl();
-            wxChar ch = event.GetKey();
-            if ( (ch == wxT('\n')) || ( (stc->GetEOLMode() == wxSCI_EOL_CR) && (ch == wxT('\r')) ) )
-                m_pPanel->UpdateMiniStc(editor);
-        }
-        else if(event.GetEventType() == wxEVT_SCI_UPDATEUI)
-            m_pPanel->UpdateMiniStc(editor);
+        if(event.GetEventType() == wxEVT_SCI_UPDATEUI)
+            m_pPanel->Update(editor);
 
         inOnEditHook = false;
     }
@@ -255,20 +243,6 @@ void MiniDoc::BuildMenu(wxMenuBar* menuBar)
         // not found so just append
         m_pViewMenu->AppendCheckItem(idViewMiniDocPanel, _("&MiniDoc"), _("Toggle displaying the MiniDoc panel"));
     }
-}
-
-void MiniDoc::BuildModuleMenu(const ModuleType type, wxMenu* menu, const FileTreeData* data)
-{
-    //Some library module is ready to display a pop-up menu.
-    //Check the parameter \"type\" and see which module it is
-    //and append any items you need in the menu...
-    //TIP: for consistency, add a separator as the first item...
-}
-
-bool MiniDoc::BuildToolBar(wxToolBar* toolBar)
-{
-    // return true if you add toolbar items
-    return false;
 }
 
 void MiniDoc::OnViewMiniDocPanel(wxCommandEvent& event)

@@ -37,8 +37,8 @@ class MiniDoc : public cbPlugin
         virtual cbConfigurationPanel *GetProjectConfigurationPanel(wxWindow *parent, cbProject *project){ return 0; }
         virtual void BuildMenu(wxMenuBar *menuBar);
 
-        virtual void BuildModuleMenu(const ModuleType type, wxMenu *menu, const FileTreeData *data = 0);
-        virtual bool BuildToolBar(wxToolBar *toolBar);
+        virtual void BuildModuleMenu(const ModuleType type, wxMenu *menu, const FileTreeData *data = 0){}
+        virtual bool BuildToolBar(wxToolBar *toolBar){return false;}
 
     protected:
         virtual void OnAttach();
@@ -46,7 +46,6 @@ class MiniDoc : public cbPlugin
 
     private:
         void OnEditorClose(CodeBlocksEvent &event);
-        void OnEditorOpen(CodeBlocksEvent &event);
         void OnEditorActivated(CodeBlocksEvent &event);
         void OnEditorDeactivated(CodeBlocksEvent &event);
         void OnEditorSplit(CodeBlocksEvent &event);

@@ -23,6 +23,7 @@ class MiniDocConfigPanel: public cbConfigurationPanel
 		//(*Declarations(MiniDocConfigPanel)
 		wxButton* ColorSelButton;
 		wxCheckBox* inverseDesignatorCheckBox;
+		wxCheckBox* showDesignatorCheckBox;
 		wxCheckBox* showScrollbarCheckBox;
 		wxCheckBox* syncPositionCheckBox;
 		wxChoice* adjustPositionChoice;
@@ -39,7 +40,6 @@ class MiniDocConfigPanel: public cbConfigurationPanel
         /// Called when the user chooses to cancel the configuration.
         virtual void OnCancel(){}
 
-
 	protected:
 
 		//(*Identifiers(MiniDocConfigPanel)
@@ -49,6 +49,7 @@ class MiniDocConfigPanel: public cbConfigurationPanel
         MiniDocPanel *panel_;
 		//(*Handlers(MiniDocConfigPanel)
 		void OnColorSelButtonClick(wxCommandEvent& event);
+		void OnShowDesignator(wxCommandEvent& event);
 		//*)
 
 	protected:

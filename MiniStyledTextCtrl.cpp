@@ -33,7 +33,7 @@ MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint&
     ConfigManager *cfg = Manager::Get()->GetConfigManager(_T("editor"));
     if (cfg->ReadBool(_T("/highlight_occurrence/enabled"), true))
     {
-        const int theIndicator = 10;
+        const int theIndicator = 12;
         wxColour highlightColour(Manager::Get()->GetColourManager()->GetColour(wxT("editor_highlight_occurrence")));
         IndicatorSetStyle(theIndicator, wxSCI_INDIC_HIGHLIGHT);
         IndicatorSetForeground(theIndicator, highlightColour );
@@ -42,7 +42,7 @@ MiniStyledTextCtrl::MiniStyledTextCtrl(wxWindow* pParent, int id, const wxPoint&
 #endif
     }
 
-    const int thePermIndicator = 12;
+    const int thePermIndicator = 10;
     IndicatorSetStyle(thePermIndicator, wxSCI_INDIC_HIGHLIGHT);
     IndicatorSetForeground(thePermIndicator, wxColour(Manager::Get()->GetColourManager()->GetColour(wxT("editor_highlight_occurrence_permanently"))) );
 #ifndef wxHAVE_RAW_BITMAP
@@ -77,16 +77,15 @@ void MiniStyledTextCtrl::Init()
 
     backgroundColour_ = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
     ConfigManager *cfg = Manager::Get()->GetConfigManager(_T("editor"));
+    showDesignator_ = cfg->ReadBool(_T("/mini_doc/show_designator"), false);
     inverseMarker_ = cfg->ReadBool(_T("/mini_doc/inverse_designator"), false);
     doScrollToPosition_ = cfg->ReadBool(_T("/mini_doc/sync_to_main_doc"), true);
 
     bool showVertScrollbar = cfg->ReadBool(_T("/mini_doc/show_vertical_scrollbar"), true);
     SetUseVerticalScrollBar(showVertScrollbar);
 
-    wxColor color = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
-
     MarkerDeleteAll(GetOurMarkerNumber());
-    MarkerSetBackground(GetOurMarkerNumber(), color);
+    MarkerSetBackground(GetOurMarkerNumber(), backgroundColour_);
     const int alpha = 100;
     MarkerSetAlpha(GetOurMarkerNumber(), alpha);
 }
@@ -146,6 +145,7 @@ int MiniStyledTextCtrl::GetLineFromPosition(const wxPoint &pt)
         line += pt.y/lh;
     return line;
 }
+
 void MiniStyledTextCtrl::OnMouseEnterOrLeave(wxMouseEvent& event)
 {
     event.Skip(false);
@@ -153,8 +153,8 @@ void MiniStyledTextCtrl::OnMouseEnterOrLeave(wxMouseEvent& event)
 
 void MiniStyledTextCtrl::DesignateVisibleRange(int from, int length)
 {
-    visibleFrom = from;
-    visibleLength = length;
+    visibleFrom_ = from;
+    visibleLength_ = length;
 
     SetMarker();
     MakePositionVisible(from, length);
@@ -171,22 +171,23 @@ void MiniStyledTextCtrl::MakePositionVisible(int from, int length)
     if (doScrollToPosition_)
         ScrollToLine(from - (LinesOnScreen()-length)/2);
 }
+
 void MiniStyledTextCtrl::SetMarker()
 {
+    if(!showDesignator_) return;
 
     Freeze();
     MarkerDeleteAll(GetOurMarkerNumber());
-    MarkerSetBackground(GetOurMarkerNumber(), backgroundColour_);
     if (inverseMarker_)
     {
-        for (int l = visibleFrom; l < visibleFrom+visibleLength ; ++l)
+        for (int l = visibleFrom_; l < visibleFrom_+visibleLength_ ; ++l)
             MarkerAdd(l, GetOurMarkerNumber());
     }
     else
     {
-        for (int l = 0; l < visibleFrom ; ++l)
+        for (int l = 0; l < visibleFrom_ ; ++l)
             MarkerAdd(l, GetOurMarkerNumber());
-        for (int l = visibleFrom+visibleLength; l < GetLineCount() ; ++l)
+        for (int l = visibleFrom_+visibleLength_; l < GetLineCount() ; ++l)
             MarkerAdd(l, GetOurMarkerNumber());
     }
     Thaw();
@@ -194,22 +195,12 @@ void MiniStyledTextCtrl::SetMarker()
 
 void MiniStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc)
 {
-    SyncFoldState(stc);
-
     int firstVisibleLine = stc->DocLineFromVisible(stc->GetFirstVisibleLine());
     int lastVisibleLine = stc->DocLineFromVisible(stc->GetFirstVisibleLine()+stc->LinesOnScreen());
 
     int totalVisibleLines = lastVisibleLine-firstVisibleLine;
 
     DesignateVisibleRange(firstVisibleLine, totalVisibleLines);
-}
-
-void MiniStyledTextCtrl::SyncFoldState(cbStyledTextCtrl *stc)
-{
-    return;
-    /// doing this would also require to calculate different positions for the marker to designate the visible area
-    for(int line = 0; line < GetLineCount() ; ++line)
-        SetFoldLevel(line, stc->GetFoldLevel(line));
 }
 
 const int MiniStyledTextCtrl::GetOurMarkerNumber()const

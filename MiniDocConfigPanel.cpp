@@ -48,12 +48,14 @@ void MiniDocConfigPanel::BuildContent(wxWindow* parent)
 	StaticText1 = (wxStaticText*)FindWindow(XRCID("ID_STATICTEXT1"));
 	ColorSelButton = (wxButton*)FindWindow(XRCID("ID_BUTTON1"));
 	syncPositionCheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX_SYNC_POS"));
+	showDesignatorCheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX_SHOW_DESIGNATOR"));
 	inverseDesignatorCheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX_INVERSE_DES"));
 	showScrollbarCheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX_SHOW_SCROLLBAR"));
 	StaticText2 = (wxStaticText*)FindWindow(XRCID("ID_STATICTEXT2"));
 	adjustPositionChoice = (wxChoice*)FindWindow(XRCID("ID_CHOICE1"));
 
 	Connect(XRCID("ID_BUTTON1"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MiniDocConfigPanel::OnColorSelButtonClick);
+	Connect(XRCID("ID_CHECKBOX_SHOW_DESIGNATOR"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MiniDocConfigPanel::OnShowDesignator);
 	//*)
 
     ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
@@ -62,8 +64,11 @@ void MiniDocConfigPanel::BuildContent(wxWindow* parent)
     wxColour backgroundColour = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
     ColorSelButton->SetBackgroundColour(backgroundColour);
 
+    const bool enableDesignator = cfg->ReadBool(_T("/mini_doc/show_designator"), false);
 	syncPositionCheckBox->SetValue(cfg->ReadBool(_T("/mini_doc/sync_to_main_doc"), true));
+	showDesignatorCheckBox->SetValue(enableDesignator);
 	inverseDesignatorCheckBox->SetValue(cfg->ReadBool(_T("/mini_doc/inverse_designator"), false));
+	inverseDesignatorCheckBox->Enable(enableDesignator);
 	showScrollbarCheckBox->SetValue(cfg->ReadBool(_T("/mini_doc/show_vertical_scrollbar"), true));
 	adjustPositionChoice->SetSelection(cfg->ReadInt(_T("/mini_doc/pos_of_main"), 2));
 }
@@ -99,6 +104,7 @@ void MiniDocConfigPanel::OnApply()
     Manager::Get()->GetColourManager()->SetColour(wxT("minidoc_background"), backgroundColour);
 
     cfg->Write(_T("/mini_doc/sync_to_main_doc"), syncPositionCheckBox->GetValue());
+    cfg->Write(_T("/mini_doc/show_designator"), showDesignatorCheckBox->GetValue());
     cfg->Write(_T("/mini_doc/inverse_designator"), inverseDesignatorCheckBox->GetValue());
     cfg->Write(_T("/mini_doc/show_vertical_scrollbar"), showScrollbarCheckBox->GetValue());
     cfg->Write(_T("/mini_doc/pos_of_main"), adjustPositionChoice->GetSelection());
@@ -116,3 +122,7 @@ wxString MiniDocConfigPanel::GetBitmapBaseName() const
     return _T("MiniDoc");
 }
 
+void MiniDocConfigPanel::OnShowDesignator(wxCommandEvent& event)
+{
+    inverseDesignatorCheckBox->Enable(showDesignatorCheckBox->GetValue());
+}

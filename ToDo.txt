@@ -1,22 +1,8 @@
-to fix:
-- sync(Update) MiniDoc
-  - deleting lines is not catched correctly
-
-- sync MicroView
-  - sync seems to work better with splitted editor. Why?
-
-
 Open points:
 A) Speed
-   it feels slow??
-B) Suggestions:
-    - use even smaller font for larger files
-    - it would be good if the space between the lines could be made smaller, so more text could be made visible.
-    -> size of font can not be minimized further.
-	-> it is not that bad as it is IMHO.
-
-C) MicroView
-   - add other graphical infos from editor to MicroView
+   it feels slow!
+   in MiniStyledTextCtrl::SetMarker() all markers get removed first to add the needed afterwards.
+   this is where most of the cpu time is used.
 
 D) C::B
 how to manage the usage of the indicators and markers? Is it needed?
@@ -27,3 +13,50 @@ Any plugin can "use" any marker/indicator number.
 
 
 
+
+
+Optimization)
+(no measurable improvement)
+    if(forceUdate)
+    {
+        MarkerDeleteAll(GetOurMarkerNumber());
+        if (inverseMarker_)
+        {
+            for (int l = visibleFrom_; l < visibleFrom_+visibleLength_ ; ++l)
+                MarkerAdd(l, GetOurMarkerNumber());
+        }
+        else
+        {
+            for (int l = 0; l < visibleFrom_ ; ++l)
+                MarkerAdd(l, GetOurMarkerNumber());
+            for (int l = visibleFrom_+visibleLength_; l < GetLineCount() ; ++l)
+                MarkerAdd(l, GetOurMarkerNumber());
+        }
+
+    }
+    else // only change marker as needed in SetMarker()
+    {
+        if (inverseMarker_)
+        {
+            for(int l = oldvisibleFrom_ ; l < visibleFrom_ && l < oldvisibleFrom_+oldvisibleLength_ ; ++l)
+                MarkerDelete(l, markerNumber);
+
+            for (int l = visibleFrom_; l < visibleFrom_+visibleLength_ ; ++l)
+                MarkerAdd(l, markerNumber);
+
+            for(int l = visibleFrom_+visibleLength_ ; l < oldvisibleFrom_+oldvisibleLength_ ; ++l)
+                MarkerDelete(l, markerNumber);
+        }
+        else
+        {
+            for(int l = visibleFrom_ ; l < oldvisibleFrom_ ; ++l)
+                MarkerDelete(l, markerNumber);
+            for (int l = oldvisibleFrom_; l < visibleFrom_ ; ++l)
+                MarkerAdd(l, markerNumber);
+
+            for (int l = oldvisibleFrom_+oldvisibleLength_; l < visibleFrom_+visibleLength_ ; ++l)
+                MarkerDelete(l, markerNumber);
+            for (int l = visibleFrom_+visibleLength_; l < oldvisibleFrom_+oldvisibleLength_ ; ++l)
+                MarkerAdd(l, markerNumber);
+        }
+    }

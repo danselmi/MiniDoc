@@ -28,8 +28,7 @@ MiniDocPanel::MiniDocPanel(wxWindow* parent, wxWindowID id):
     wxPanel(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("id")),
     miniStc_(NULL)
 {
-    wxBoxSizer* boxSizer;
-    boxSizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer* boxSizer = new wxBoxSizer(wxHORIZONTAL);
     miniStc_ = new MiniStyledTextCtrl(this, wxID_ANY);
     boxSizer->Add(miniStc_, 1, wxALL|wxEXPAND, 5);
     SetSizer(boxSizer);
@@ -43,7 +42,7 @@ void MiniDocPanel::UpdateConfig()
         miniStc_->UpdateConfig();
 }
 
-void MiniDocPanel::UpdateMiniStc(EditorBase *eb)
+void MiniDocPanel::Update(EditorBase *eb)
 {
     if(!eb)
         return;
@@ -111,8 +110,7 @@ void MiniDocPanel::OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event)
     int line = event.GetLine();
 
     cbEditor *ed = dynamic_cast<cbEditor*>(Manager::Get()->GetEditorManager()->GetActiveEditor());
-    if(!ed)
-        return;
+    if(!ed) return;
 
     if(cbStyledTextCtrl *stc = ed->GetControl())
     {
@@ -124,20 +122,10 @@ void MiniDocPanel::OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event)
             k = 2; //selected line on center
             k = 1; //selected line on top*/
         k = cfg->ReadInt(_T("mini_doc/pos_of_main"), 2);
-        switch (k)
-        {
-        case 4:
-        case 3:
-        case 2:
+        if(k>1 && k<5)
             stc->ScrollToLine(line - stc->LinesOnScreen()/k);
-            break;
-        case 1:
+        else if(k==1)
             stc->ScrollToLine(line);
-            break;
-        case 0:
-        default:
-            break;
-        }
     }
 }
 
