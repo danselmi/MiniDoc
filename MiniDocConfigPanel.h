@@ -22,8 +22,8 @@ class MiniDocConfigPanel: public cbConfigurationPanel
 
 		//(*Declarations(MiniDocConfigPanel)
 		wxButton* ColorSelButton;
-		wxCheckBox* ShowScrollbar;
 		wxCheckBox* inverseDesignatorCheckBox;
+		wxCheckBox* showScrollbarCheckBox;
 		wxCheckBox* syncPositionCheckBox;
 		wxChoice* adjustPositionChoice;
 		wxStaticText* StaticText1;
