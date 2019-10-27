@@ -28,7 +28,7 @@ END_EVENT_TABLE()
 // constructor
 MiniDoc::MiniDoc():
     m_pPanel(NULL),
-    currentEb_(NULL)
+    m_pViewMenu(NULL)
 {
     // Make sure our resources are available.
     // In the generated boilerplate code we have no resources but when
@@ -71,23 +71,20 @@ void MiniDoc::OnAttach()
     dockevt.stretch = true;
     Manager::Get()->ProcessEvent(dockevt);
 
-    //Manager::Get()->RegisterEventSink(cbEVT_EDITOR_OPEN,        new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorOpen));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_CLOSE,       new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorClose));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_ACTIVATED,   new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorActivated));
-    Manager::Get()->RegisterEventSink(cbEVT_EDITOR_DEACTIVATED, new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorDeactivated));
     Manager::Get()->RegisterEventSink(cbEVT_EDITOR_SPLIT,       new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorSplit));
-    Manager::Get()->RegisterEventSink(cbEVT_EDITOR_UNSPLIT,     new cbEventFunctor<MiniDoc, CodeBlocksEvent>(this, &MiniDoc::OnEditorUnsplit));
 
     // check if editor is open
     EditorBase *eb = Manager::Get()->GetEditorManager()->GetActiveEditor();
     if(eb && eb->IsBuiltinEditor())
     {
-        currentEb_ = eb;
-        m_pPanel->ShowMiniatureOf(eb);
-        static_cast<cbEditor*>(eb)->GetLeftSplitViewControl()->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-        cbStyledTextCtrl *stc = static_cast<cbEditor*>(eb)->GetRightSplitViewControl();
-        if(stc)
-            stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+        cbEditor *ed = dynamic_cast<cbEditor*>(eb);
+        if(ed)
+        {
+            ConnectSizeEvent(ed);
+            m_pPanel->ShowMiniatureOf(ed);
+        }
     }
 }
 
@@ -97,83 +94,50 @@ void MiniDoc::OnRelease(bool appShutDown)
 
     if ( m_pPanel && !appShutDown )
     {
-        EditorBase *eb = Manager::Get()->GetEditorManager()->GetActiveEditor();
-        if (eb && eb->IsBuiltinEditor())
-        {
-            static_cast<cbEditor*>(eb)->GetLeftSplitViewControl()->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-            cbStyledTextCtrl *stc = static_cast<cbEditor*>(eb)->GetRightSplitViewControl();
-            if(stc)
-                stc->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-        }
         m_pPanel->ShowMiniatureOf(NULL);
+
         CodeBlocksDockEvent docevt(cbEVT_REMOVE_DOCK_WINDOW);
         docevt.pWindow = m_pPanel;
         Manager::Get()->ProcessEvent(docevt);
+
         // and destroy the panel
         m_pPanel->Destroy();
         m_pPanel = NULL;
-        currentEb_ = NULL;
+    }
+}
+
+void MiniDoc::ConnectSizeEvent(cbEditor *ed)
+{
+    if(ed)
+    {
+        ed->GetLeftSplitViewControl()->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+        if(cbStyledTextCtrl *stc = ed->GetRightSplitViewControl())
+            stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
     }
 }
 
 void MiniDoc::OnEditorClose(CodeBlocksEvent& event)
 {
-    if (m_pPanel && IsAttached())
-    {
-        currentEb_ = Manager::Get()->GetEditorManager()->GetActiveEditor();
-        m_pPanel->ShowMiniatureOf(currentEb_);
-        if(currentEb_ && currentEb_->IsBuiltinEditor())
-        {
-            static_cast<cbEditor*>(currentEb_)->GetLeftSplitViewControl()->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-            cbStyledTextCtrl *stc = static_cast<cbEditor*>(currentEb_)->GetRightSplitViewControl();
-            if(stc)
-                stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-        }
-    }
+    OnEditorEvent();
 }
 
 void MiniDoc::OnEditorActivated(CodeBlocksEvent& event)
 {
-    if (m_pPanel && IsAttached())
-    {
-        currentEb_ = event.GetEditor();
-        m_pPanel->ShowMiniatureOf(currentEb_);
-        if (currentEb_->IsBuiltinEditor())
-        {
-            static_cast<cbEditor*>(currentEb_)->GetLeftSplitViewControl()->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-            cbStyledTextCtrl *stc = static_cast<cbEditor*>(currentEb_)->GetRightSplitViewControl();
-            if(stc)
-                stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-        }
-    }
+    OnEditorEvent();
 }
 
-void MiniDoc::OnEditorDeactivated(CodeBlocksEvent& event)
+void MiniDoc::OnEditorEvent()
 {
     if (m_pPanel && IsAttached())
     {
-        if (event.GetEditor()->IsBuiltinEditor())
+        cbEditor *ed = NULL;
+        EditorBase *eb = Manager::Get()->GetEditorManager()->GetActiveEditor();
+        if(eb && eb->IsBuiltinEditor())
         {
-            static_cast<cbEditor*>(event.GetEditor())->GetLeftSplitViewControl()->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-            cbStyledTextCtrl *stc = static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
-            if(stc)
-                stc->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+            ed = dynamic_cast<cbEditor*>(eb);
+            ConnectSizeEvent(ed);
         }
-        m_pPanel->ShowMiniatureOf(NULL);
-        currentEb_ = NULL;
-    }
-}
-
-void MiniDoc::OnEditorUnsplit(CodeBlocksEvent& event)
-{
-    if (m_pPanel && IsAttached())
-    {
-        if (event.GetEditor()->IsBuiltinEditor())
-        {
-            cbStyledTextCtrl *stc = static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
-            //if(stc)
-                stc->Disconnect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
-        }
+        m_pPanel->ShowMiniatureOf(ed);
     }
 }
 
@@ -183,16 +147,21 @@ void MiniDoc::OnEditorSplit(CodeBlocksEvent& event)
     {
         if (event.GetEditor()->IsBuiltinEditor())
         {
-            cbStyledTextCtrl *stc = static_cast<cbEditor*>(event.GetEditor())->GetRightSplitViewControl();
-            //if(stc)
-                stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+            if(cbEditor *ed = dynamic_cast<cbEditor*>(event.GetEditor()))
+            {
+                if(cbStyledTextCtrl *stc = ed->GetRightSplitViewControl())
+                    stc->Connect(wxEVT_SIZE,wxSizeEventHandler(MiniDoc::OnResize), nullptr, this);
+            }
         }
     }
 }
 
 void MiniDoc::OnResize(wxSizeEvent& event)
 {
-    m_pPanel->Update(currentEb_);
+    EditorBase *eb = Manager::Get()->GetEditorManager()->GetActiveEditor();
+    if(eb && eb->IsBuiltinEditor())
+        if(cbEditor *ed = dynamic_cast<cbEditor*>(eb))
+            m_pPanel->Update(ed);
     event.Skip();
 }
 
@@ -202,8 +171,14 @@ void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)
     if(!inOnEditHook)
     {
         inOnEditHook = true;
-        if(event.GetEventType() == wxEVT_SCI_UPDATEUI)
-            m_pPanel->Update(editor);
+
+        static wxTimer timer;
+        if(!timer.IsRunning())
+        {
+            timer.Start(100, true);
+            if(event.GetEventType() == wxEVT_SCI_UPDATEUI)
+                m_pPanel->Update(editor);
+        }
 
         inOnEditHook = false;
     }
@@ -213,8 +188,7 @@ int MiniDoc::Configure()
 {
     //create and display the configuration dialog for your plugin
     cbConfigurationDialog dlg(Manager::Get()->GetAppWindow(), wxID_ANY, _("Your dialog title"));
-    cbConfigurationPanel* panel = GetConfigurationPanel(&dlg);
-    if (panel)
+    if (cbConfigurationPanel* panel = GetConfigurationPanel(&dlg))
     {
         dlg.AttachConfigurationPanel(panel);
         PlaceWindow(&dlg);
@@ -230,18 +204,21 @@ void MiniDoc::BuildMenu(wxMenuBar* menuBar)
     if (viewPos != wxNOT_FOUND)
     {
         m_pViewMenu = menuBar->GetMenu(viewPos);
-        wxMenuItemList& items = m_pViewMenu->GetMenuItems();
-        // find the first separator and insert before it
-        for (size_t i = 0; i < items.GetCount(); ++i)
+        if(m_pViewMenu)
         {
-            if (items[i]->IsSeparator())
+            wxMenuItemList& items = m_pViewMenu->GetMenuItems();
+            // find the first separator and insert before it
+            for (size_t i = 0; i < items.GetCount(); ++i)
             {
-                m_pViewMenu->InsertCheckItem(i, idViewMiniDocPanel, _("&MiniDoc"), _("Toggle displaying the MiniDoc panel"));
-                return;
+                if (items[i]->IsSeparator())
+                {
+                    m_pViewMenu->InsertCheckItem(i, idViewMiniDocPanel, _("&MiniDoc"), _("Toggle displaying the MiniDoc panel"));
+                    return;
+                }
             }
+            // not found so just append
+            m_pViewMenu->AppendCheckItem(idViewMiniDocPanel, _("&MiniDoc"), _("Toggle displaying the MiniDoc panel"));
         }
-        // not found so just append
-        m_pViewMenu->AppendCheckItem(idViewMiniDocPanel, _("&MiniDoc"), _("Toggle displaying the MiniDoc panel"));
     }
 }
 
@@ -259,7 +236,6 @@ void MiniDoc::OnUpdateViewMenu(wxUpdateUIEvent &event)
         bool isVis = IsWindowReallyShown((wxWindow*)m_pPanel);
         m_pViewMenu->Check(idViewMiniDocPanel, isVis);
     }
-    // must do...
     event.Skip();
 }
 

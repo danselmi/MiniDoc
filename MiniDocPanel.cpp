@@ -26,10 +26,9 @@ END_EVENT_TABLE()
 
 MiniDocPanel::MiniDocPanel(wxWindow* parent, wxWindowID id):
     wxPanel(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("id")),
-    miniStc_(NULL)
+    miniStc_(new MiniStyledTextCtrl(this, wxID_ANY))
 {
     wxBoxSizer* boxSizer = new wxBoxSizer(wxHORIZONTAL);
-    miniStc_ = new MiniStyledTextCtrl(this, wxID_ANY);
     boxSizer->Add(miniStc_, 1, wxALL|wxEXPAND, 5);
     SetSizer(boxSizer);
     boxSizer->Fit(this);
@@ -42,66 +41,33 @@ void MiniDocPanel::UpdateConfig()
         miniStc_->UpdateConfig();
 }
 
-void MiniDocPanel::Update(EditorBase *eb)
+void MiniDocPanel::Update(cbEditor *ed)
 {
-    if(!eb)
-        return;
-    if(eb && eb->IsBuiltinEditor())
+    if(ed && miniStc_)
     {
-        cbStyledTextCtrl *stc = static_cast<cbEditor *>(eb)->GetControl();
-
-        if(miniStc_)
+        if(cbStyledTextCtrl *stc = ed->GetControl())
             miniStc_->UpdateMiniature(stc);
     }
 }
 
-void MiniDocPanel::ChangeMiniStcDoc(cbEditor *ed)
+void MiniDocPanel::ShowMiniatureOf(cbEditor *ed)
 {
+    if(!miniStc_)
+        return;
+
     if(ed)
     {
-        if(miniStc_)
-        {
-            miniStc_->SetDocPointer(ed->GetControl()->GetDocPointer());
-            EditorColourSet *ecs = Manager::Get()->GetEditorManager()->GetColourSet();
-            const wxString lang = ed->GetLanguage();
-            const bool isC = lang == "C/C++";
-            ecs->Apply(lang, miniStc_, isC, true);
+        miniStc_->SetDocPointer(ed->GetControl()->GetDocPointer());
+        EditorColourSet *ecs = Manager::Get()->GetEditorManager()->GetColourSet();
+        const wxString lang = ed->GetLanguage();
+        const bool isC = lang == "C/C++";
+        ecs->Apply(lang, miniStc_, isC, true);
 
-            miniStc_->UpdateMiniature(ed->GetControl());
-        }
+        miniStc_->UpdateMiniature(ed->GetControl());
     }
     else
     {
-        if(miniStc_)
-            miniStc_->SetDocPointer(NULL);
-    }
-}
-
-void MiniDocPanel::ShowMiniatureOf(EditorBase *eb)
-{
-    wxString str;
-
-    if(eb)
-    {
-        str = _T("active: ");
-        str << eb->GetFilename();
-        cbEditor *ed = dynamic_cast<cbEditor*>(eb);
-        if(ed)
-        {
-            str << eb->GetFilename();
-            ChangeMiniStcDoc(ed);
-        }
-        else
-        {
-            str << _T("don't know how to draw miniature of ");
-            str << eb->GetFilename();
-            ChangeMiniStcDoc(NULL);
-        }
-    }
-    else
-    {
-        str = _T("No Doc open");
-        ChangeMiniStcDoc(NULL);
+        miniStc_->SetDocPointer(NULL);
     }
 }
 

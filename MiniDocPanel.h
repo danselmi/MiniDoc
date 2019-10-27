@@ -22,14 +22,12 @@ class MiniDocPanel: public wxPanel
         MiniDocPanel(wxWindow* parent,wxWindowID id=wxID_ANY);
         virtual ~MiniDocPanel(){}
 
-        void ShowMiniatureOf(EditorBase *eb = NULL);
-        void Update(EditorBase *eb);
+        void ShowMiniatureOf(cbEditor *ed);
+        void Update(cbEditor *ed);
         void UpdateConfig();
 
     protected:
         void OnMiniStcLineClick(MiniStyledTextCtrlLineClickedEvent &event);
-
-        void ChangeMiniStcDoc(cbEditor *ed);
 
         MiniStyledTextCtrl *miniStc_;
 

@@ -47,9 +47,10 @@ class MiniDoc : public cbPlugin
     private:
         void OnEditorClose(CodeBlocksEvent &event);
         void OnEditorActivated(CodeBlocksEvent &event);
-        void OnEditorDeactivated(CodeBlocksEvent &event);
         void OnEditorSplit(CodeBlocksEvent &event);
-        void OnEditorUnsplit(CodeBlocksEvent &event);
+        void OnEditorEvent();
+        void ConnectSizeEvent(cbEditor *ed);
+
         void OnResize(wxSizeEvent &event);
 
         void OnViewMiniDocPanel(wxCommandEvent &event);
@@ -59,7 +60,6 @@ class MiniDoc : public cbPlugin
 
         int m_FunctorId;
         MiniDocPanel *m_pPanel;
-        EditorBase *currentEb_;
         wxMenu *m_pViewMenu;
     private:
         DECLARE_EVENT_TABLE();
