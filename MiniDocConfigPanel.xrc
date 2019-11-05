@@ -6,56 +6,54 @@
 			<orient>wxVERTICAL</orient>
 			<object class="sizeritem">
 				<object class="wxBoxSizer">
+					<orient>wxVERTICAL</orient>
 					<object class="sizeritem">
-						<object class="wxStaticText" name="ID_STATICTEXT1">
-							<label>Color</label>
-							<tooltip>Choose color of designation in MiniDoc</tooltip>
+						<object class="wxCheckBox" name="ID_CHECKBOX_SYNC_POS">
+							<label>Sync position to main document</label>
+							<tooltip>Make designation in MiniDoc always visible.</tooltip>
 						</object>
-						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALL</flag>
 						<border>5</border>
-						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxButton" name="ID_BUTTON1">
-							<label>...</label>
+						<object class="wxBoxSizer">
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_CHECKBOX_SHOW_DESIGNATOR">
+									<label>Show designator (resource-hungry)</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_COLOR_BUTTON">
+									<label>color</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+					</object>
+					<object class="sizeritem">
+						<object class="wxCheckBox" name="ID_CHECKBOX_INVERSE_DES">
+							<label>Inverse designator (mark visible part)</label>
+							<checked>1</checked>
+						</object>
+						<flag>wxALL|wxALIGN_LEFT</flag>
 						<border>5</border>
-						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxCheckBox" name="ID_CHECKBOX_SHOW_SCROLLBAR">
+							<label>Show vertical scrollbar</label>
+						</object>
+						<flag>wxALL</flag>
+						<border>5</border>
 					</object>
 				</object>
 				<flag>wxALL|wxALIGN_LEFT</flag>
 				<border>5</border>
-			</object>
-			<object class="sizeritem">
-				<object class="wxCheckBox" name="ID_CHECKBOX_SYNC_POS">
-					<label>Sync position to main document</label>
-					<tooltip>Make designation in MiniDoc always visible.</tooltip>
-				</object>
-				<flag>wxALL|wxALIGN_LEFT</flag>
-				<border>5</border>
-			</object>
-			<object class="sizeritem">
-				<object class="wxCheckBox" name="ID_CHECKBOX_SHOW_DESIGNATOR">
-					<label>Show designator (resource-hungry)</label>
-				</object>
-				<flag>wxALL|wxALIGN_LEFT</flag>
-				<border>5</border>
-			</object>
-			<object class="sizeritem">
-				<object class="wxCheckBox" name="ID_CHECKBOX_INVERSE_DES">
-					<label>Inverse designator (mark visible part)</label>
-					<checked>1</checked>
-				</object>
-				<flag>wxALL|wxALIGN_LEFT</flag>
-				<border>5</border>
-			</object>
-			<object class="sizeritem">
-				<object class="wxCheckBox" name="ID_CHECKBOX_SHOW_SCROLLBAR">
-					<label>Show vertical scrollbar</label>
-				</object>
-				<flag>wxALL|wxALIGN_LEFT</flag>
-				<border>5</border>
+				<option>1</option>
 			</object>
 			<object class="sizeritem">
 				<object class="wxBoxSizer">

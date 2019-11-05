@@ -2,13 +2,12 @@
 <wxsmith>
 	<resource_extra>
 		<object root="1" />
-		<object name="ID_STATICTEXT1" class="wxStaticText" variable="StaticText1" member="yes" />
-		<object name="ID_BUTTON1" class="wxButton" variable="ColorSelButton" member="yes">
-			<handler function="OnColorSelButtonClick" entry="EVT_BUTTON" />
-		</object>
 		<object name="ID_CHECKBOX_SYNC_POS" class="wxCheckBox" variable="syncPositionCheckBox" member="yes" />
 		<object name="ID_CHECKBOX_SHOW_DESIGNATOR" class="wxCheckBox" variable="showDesignatorCheckBox" member="yes">
 			<handler function="OnShowDesignator" entry="EVT_CHECKBOX" />
+		</object>
+		<object name="ID_COLOR_BUTTON" class="wxButton" variable="colorSelButton" member="yes">
+			<handler function="OnColorSelButtonClick" entry="EVT_BUTTON" />
 		</object>
 		<object name="ID_CHECKBOX_INVERSE_DES" class="wxCheckBox" variable="inverseDesignatorCheckBox" member="yes" />
 		<object name="ID_CHECKBOX_SHOW_SCROLLBAR" class="wxCheckBox" variable="showScrollbarCheckBox" member="yes" />

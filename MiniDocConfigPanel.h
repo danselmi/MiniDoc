@@ -3,6 +3,7 @@
 
 //(*Headers(MiniDocConfigPanel)
 #include <wx/panel.h>
+class wxBoxSizer;
 class wxButton;
 class wxCheckBox;
 class wxChoice;
@@ -21,13 +22,12 @@ class MiniDocConfigPanel: public cbConfigurationPanel
 		virtual ~MiniDocConfigPanel();
 
 		//(*Declarations(MiniDocConfigPanel)
-		wxButton* ColorSelButton;
+		wxButton* colorSelButton;
 		wxCheckBox* inverseDesignatorCheckBox;
 		wxCheckBox* showDesignatorCheckBox;
 		wxCheckBox* showScrollbarCheckBox;
 		wxCheckBox* syncPositionCheckBox;
 		wxChoice* adjustPositionChoice;
-		wxStaticText* StaticText1;
 		wxStaticText* StaticText2;
 		//*)
 

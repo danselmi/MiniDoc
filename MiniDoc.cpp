@@ -181,13 +181,14 @@ void MiniDoc::UpdatePanel()
 
 void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)
 {
+    if(event.GetEventType() != wxEVT_SCI_UPDATEUI) return;
+
     static wxTimer timer;
     if(!timer.IsRunning())
     {
-        timer.Start(100, true);
-        if(event.GetEventType() == wxEVT_SCI_UPDATEUI)
-            m_pPanel->Update(editor);
         updatePending_ = false;
+        timer.Start(100, true);
+        m_pPanel->Update(editor);
     }
     else
         updatePending_ = true;

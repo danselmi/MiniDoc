@@ -23,6 +23,7 @@
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
+#include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/xrc/xmlres.h>
 //*)
@@ -45,30 +46,30 @@ void MiniDocConfigPanel::BuildContent(wxWindow* parent)
 {
 	//(*Initialize(MiniDocConfigPanel)
 	wxXmlResource::Get()->LoadObject(this,parent,_T("MiniDocConfigPanel"),_T("wxPanel"));
-	StaticText1 = (wxStaticText*)FindWindow(XRCID("ID_STATICTEXT1"));
-	ColorSelButton = (wxButton*)FindWindow(XRCID("ID_BUTTON1"));
 	syncPositionCheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX_SYNC_POS"));
 	showDesignatorCheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX_SHOW_DESIGNATOR"));
+	colorSelButton = (wxButton*)FindWindow(XRCID("ID_COLOR_BUTTON"));
 	inverseDesignatorCheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX_INVERSE_DES"));
 	showScrollbarCheckBox = (wxCheckBox*)FindWindow(XRCID("ID_CHECKBOX_SHOW_SCROLLBAR"));
 	StaticText2 = (wxStaticText*)FindWindow(XRCID("ID_STATICTEXT2"));
 	adjustPositionChoice = (wxChoice*)FindWindow(XRCID("ID_CHOICE1"));
 
-	Connect(XRCID("ID_BUTTON1"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MiniDocConfigPanel::OnColorSelButtonClick);
 	Connect(XRCID("ID_CHECKBOX_SHOW_DESIGNATOR"),wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MiniDocConfigPanel::OnShowDesignator);
+	Connect(XRCID("ID_COLOR_BUTTON"),wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MiniDocConfigPanel::OnColorSelButtonClick);
 	//*)
 
     ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
     if(!cfg) return;
 
     wxColour backgroundColour = Manager::Get()->GetColourManager()->GetColour(wxT("minidoc_background"));
-    ColorSelButton->SetBackgroundColour(backgroundColour);
+    colorSelButton->SetBackgroundColour(backgroundColour);
 
     const bool enableDesignator = cfg->ReadBool(_T("/mini_doc/show_designator"), false);
 	syncPositionCheckBox->SetValue(cfg->ReadBool(_T("/mini_doc/sync_to_main_doc"), true));
 	showDesignatorCheckBox->SetValue(enableDesignator);
 	inverseDesignatorCheckBox->SetValue(cfg->ReadBool(_T("/mini_doc/inverse_designator"), false));
 	inverseDesignatorCheckBox->Enable(enableDesignator);
+	colorSelButton->Enable(enableDesignator);
 	showScrollbarCheckBox->SetValue(cfg->ReadBool(_T("/mini_doc/show_vertical_scrollbar"), true));
 	adjustPositionChoice->SetSelection(cfg->ReadInt(_T("/mini_doc/pos_of_main"), 2));
 }
@@ -82,16 +83,14 @@ MiniDocConfigPanel::~MiniDocConfigPanel()
 void MiniDocConfigPanel::OnColorSelButtonClick(wxCommandEvent& event)
 {
     wxColourData data;
-    wxWindow* sender = FindWindowById(event.GetId());
-    data.SetColour(sender->GetBackgroundColour());
+    data.SetColour(colorSelButton->GetBackgroundColour());
 
     wxColourDialog dlg(this, &data);
     PlaceWindow(&dlg);
     if (dlg.ShowModal() == wxID_OK)
     {
         wxColour colour = dlg.GetColourData().GetColour();
-        sender->SetBackgroundColour(colour);
-        sender->SetLabel(wxEmptyString);
+        colorSelButton->SetBackgroundColour(colour);
     }
 }
 
@@ -100,7 +99,7 @@ void MiniDocConfigPanel::OnApply()
     // save any changes
     ConfigManager* cfg = Manager::Get()->GetConfigManager(_T("editor"));
 
-    wxColour backgroundColour = XRCCTRL(*this, "ID_BUTTON1", wxButton)->GetBackgroundColour();
+    wxColour backgroundColour = colorSelButton->GetBackgroundColour();
     Manager::Get()->GetColourManager()->SetColour(wxT("minidoc_background"), backgroundColour);
 
     cfg->Write(_T("/mini_doc/sync_to_main_doc"), syncPositionCheckBox->GetValue());
@@ -125,4 +124,5 @@ wxString MiniDocConfigPanel::GetBitmapBaseName() const
 void MiniDocConfigPanel::OnShowDesignator(wxCommandEvent& event)
 {
     inverseDesignatorCheckBox->Enable(showDesignatorCheckBox->GetValue());
+    colorSelButton->Enable(showDesignatorCheckBox->GetValue());
 }
