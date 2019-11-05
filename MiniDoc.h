@@ -50,6 +50,8 @@ class MiniDoc : public cbPlugin
         void OnEditorSplit(CodeBlocksEvent &event);
         void OnEditorEvent();
         void ConnectSizeEvent(cbEditor *ed);
+        void OnIdle(wxIdleEvent &event);
+        void UpdatePanel();
 
         void OnResize(wxSizeEvent &event);
 
@@ -59,6 +61,7 @@ class MiniDoc : public cbPlugin
         void OnEditorHook(cbEditor *editor, wxScintillaEvent &event);
 
         int m_FunctorId;
+        bool updatePending_;
         MiniDocPanel *m_pPanel;
         wxMenu *m_pViewMenu;
     private:

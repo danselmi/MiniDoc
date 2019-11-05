@@ -23,10 +23,12 @@ BEGIN_EVENT_TABLE(MiniDoc, cbPlugin)
     // add any events you want to handle here
     EVT_MENU(idViewMiniDocPanel,      MiniDoc::OnViewMiniDocPanel)
     EVT_UPDATE_UI(idViewMiniDocPanel, MiniDoc::OnUpdateViewMenu)
+    EVT_IDLE(                         MiniDoc::OnIdle)
 END_EVENT_TABLE()
 
 // constructor
 MiniDoc::MiniDoc():
+    updatePending_(false),
     m_pPanel(NULL),
     m_pViewMenu(NULL)
 {
@@ -141,6 +143,13 @@ void MiniDoc::OnEditorEvent()
     }
 }
 
+void MiniDoc::OnIdle(wxIdleEvent &event)
+{
+    if(updatePending_)
+        UpdatePanel();
+    updatePending_ = false;
+}
+
 void MiniDoc::OnEditorSplit(CodeBlocksEvent& event)
 {
     if (m_pPanel && IsAttached())
@@ -158,30 +167,30 @@ void MiniDoc::OnEditorSplit(CodeBlocksEvent& event)
 
 void MiniDoc::OnResize(wxSizeEvent& event)
 {
+    UpdatePanel();
+    event.Skip();
+}
+
+void MiniDoc::UpdatePanel()
+{
     EditorBase *eb = Manager::Get()->GetEditorManager()->GetActiveEditor();
     if(eb && eb->IsBuiltinEditor())
         if(cbEditor *ed = dynamic_cast<cbEditor*>(eb))
             m_pPanel->Update(ed);
-    event.Skip();
 }
 
 void MiniDoc::OnEditorHook(cbEditor* editor, wxScintillaEvent& event)
 {
-    static bool inOnEditHook = false;
-    if(!inOnEditHook)
+    static wxTimer timer;
+    if(!timer.IsRunning())
     {
-        inOnEditHook = true;
-
-        static wxTimer timer;
-        if(!timer.IsRunning())
-        {
-            timer.Start(100, true);
-            if(event.GetEventType() == wxEVT_SCI_UPDATEUI)
-                m_pPanel->Update(editor);
-        }
-
-        inOnEditHook = false;
+        timer.Start(100, true);
+        if(event.GetEventType() == wxEVT_SCI_UPDATEUI)
+            m_pPanel->Update(editor);
+        updatePending_ = false;
     }
+    else
+        updatePending_ = true;
 }
 
 int MiniDoc::Configure()

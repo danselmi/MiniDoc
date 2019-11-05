@@ -14,7 +14,6 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         void UpdateMiniature(cbStyledTextCtrl *stc);
         void UpdateConfig();
         void Init();
-    protected:
     private:
         void SetMarker();
         void DesignateVisibleRange(int from, int to);
@@ -32,12 +31,12 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         int visibleFrom_, visibleLength_;
 
         const int GetOurMarkerNumber()const;
-    private:
+
         wxColor backgroundColour_;
         bool showDesignator_;
         bool inverseMarker_;
         bool doScrollToPosition_;
-    private:
+
         DECLARE_EVENT_TABLE();
 };
 

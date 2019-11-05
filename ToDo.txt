@@ -1,8 +1,5 @@
 Open points:
-A) Speed
-   it feels slow!
-   in MiniStyledTextCtrl::SetMarker() all markers get removed first to add the needed afterwards.
-   this is where most of the cpu time is used.
+A) Speed; in MiniStyledTextCtrl::SetMarker() this is where most of the cpu time is used.
 
 D) C::B
 how to manage the usage of the indicators and markers? Is it needed?
