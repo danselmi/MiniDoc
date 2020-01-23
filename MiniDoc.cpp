@@ -148,6 +148,8 @@ void MiniDoc::OnIdle(wxIdleEvent &event)
     if(updatePending_)
         UpdatePanel();
     updatePending_ = false;
+
+    event.Skip();
 }
 
 void MiniDoc::OnEditorSplit(CodeBlocksEvent& event)
