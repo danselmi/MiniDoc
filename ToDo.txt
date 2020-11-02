@@ -1,6 +1,8 @@
 Open points:
 A) Speed; in MiniStyledTextCtrl::SetMarker() this is where most of the cpu time is used.
 
+b) Drop file into MiniDocPanel -> open the file
+
 D) C::B
 how to manage the usage of the indicators and markers? Is it needed?
 MiniStyledTextCtrl has to follow changes in different plugins to "mimic" cbEditors control colors.
