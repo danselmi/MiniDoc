@@ -8,12 +8,17 @@ extern const wxEventType MiniStyledTextCtrlCommandEvent;
 class MiniStyledTextCtrlLineClickedEvent: public wxCommandEvent
 {
 public:
-	MiniStyledTextCtrlLineClickedEvent( wxEventType commandType = MiniStyledTextCtrlCommandEvent, int id = 0 )
-	:  wxCommandEvent(commandType, id) { }
+	explicit MiniStyledTextCtrlLineClickedEvent(wxEventType commandType = MiniStyledTextCtrlCommandEvent, int id = 0):
+        wxCommandEvent(commandType, id),
+        line(0)
+    {}
 
 	// You *must* copy here the data to be transported
-	MiniStyledTextCtrlLineClickedEvent( const MiniStyledTextCtrlLineClickedEvent &event )
-	:  wxCommandEvent(event) { this->SetLine( event.GetLine() ); }
+	explicit MiniStyledTextCtrlLineClickedEvent(const MiniStyledTextCtrlLineClickedEvent &event):
+        wxCommandEvent(event)
+    {
+        this->SetLine( event.GetLine() );
+    }
 
 	// Required for sending with wxPostEvent()
 	wxEvent* Clone() const { return new MiniStyledTextCtrlLineClickedEvent(*this); }
