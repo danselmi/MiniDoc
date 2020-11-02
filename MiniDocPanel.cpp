@@ -15,8 +15,8 @@
 #include <editormanager.h>
 #include <editorcolourset.h>
 #include <configmanager.h>
-#include <configmanager.h>
 
+#include <wx/settings.h>
 #include <wx/intl.h>
 #include <wx/string.h>
 
@@ -28,6 +28,8 @@ MiniDocPanel::MiniDocPanel(wxWindow* parent, wxWindowID id):
     wxPanel(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("id")),
     miniStc_(new MiniStyledTextCtrl(this, wxID_ANY))
 {
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    miniStc_->StyleSetBackground(wxSCI_STYLE_DEFAULT, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     wxBoxSizer* boxSizer = new wxBoxSizer(wxHORIZONTAL);
     boxSizer->Add(miniStc_, 1, wxALL|wxEXPAND, 5);
     SetSizer(boxSizer);
@@ -38,7 +40,10 @@ MiniDocPanel::MiniDocPanel(wxWindow* parent, wxWindowID id):
 void MiniDocPanel::UpdateConfig()
 {
     if(miniStc_)
+    {
         miniStc_->UpdateConfig();
+        miniStc_->StyleSetBackground(wxSCI_STYLE_DEFAULT, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    }
 
     EditorManager *edMan = Manager::Get()->GetEditorManager();
     if(!edMan) return;
@@ -81,6 +86,7 @@ void MiniDocPanel::ShowMiniatureOf(cbEditor *ed)
     else
     {
         miniStc_->SetDocPointer(NULL);
+        miniStc_->StyleSetBackground(wxSCI_STYLE_DEFAULT, wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     }
 }
 
