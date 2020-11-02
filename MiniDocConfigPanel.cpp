@@ -16,7 +16,7 @@
     #include <logmanager.h>
 #endif
 
-#include "cbcolourmanager.h"
+#include <cbcolourmanager.h>
 #include "MiniDocPanel.h"
 
 //(*InternalHeaders(MiniDocConfigPanel)

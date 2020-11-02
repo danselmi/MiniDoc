@@ -1,7 +1,7 @@
 #ifndef MINI_STYLED_TEXT_CTRL_H
 #define MINI_STYLED_TEXT_CTRL_H
 
-#include "cbstyledtextctrl.h"
+#include <cbstyledtextctrl.h>
 
 class ConfigManager;
 

@@ -1,10 +1,10 @@
 #include <sdk.h> // Code::Blocks SDK
-#include "configurationpanel.h"
-#include "editor_hooks.h"
-#include "cbcolourmanager.h"
-#include "editormanager.h"
-#include "logmanager.h"
-#include "cbeditor.h"
+#include <configurationpanel.h>
+#include <editor_hooks.h>
+#include <cbcolourmanager.h>
+#include <editormanager.h>
+#include <logmanager.h>
+#include <cbeditor.h>
 
 #include "MiniDoc.h"
 #include "MiniDocPanel.h"

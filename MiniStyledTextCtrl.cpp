@@ -1,8 +1,10 @@
 #include "MiniStyledTextCtrl.h"
 
 #include <wx/event.h>
-#include "configmanager.h"
-#include "cbcolourmanager.h"
+#include <configmanager.h>
+#include <cbcolourmanager.h>
+#include <editormanager.h>
+#include <editorcolourset.h>
 
 #include "MiniStyledTextCtrlEvent.h"
 
@@ -212,3 +214,4 @@ const int MiniStyledTextCtrl::GetOurMarkerNumber()
 {
     return 8;
 }
+
