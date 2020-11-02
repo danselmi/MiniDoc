@@ -90,6 +90,11 @@ void MiniStyledTextCtrl::Init()
     MarkerSetAlpha(GetOurMarkerNumber(), alpha);
 }
 
+void MiniStyledTextCtrl::RemoveMarkers(cbStyledTextCtrl *stc)
+{
+    stc->MarkerDeleteAll(GetOurMarkerNumber());
+}
+
 void MiniStyledTextCtrl::OnKey(wxKeyEvent& event)
 {
     // ignore key press events
@@ -203,7 +208,7 @@ void MiniStyledTextCtrl::UpdateMiniature(cbStyledTextCtrl *stc)
     DesignateVisibleRange(firstVisibleLine, totalVisibleLines);
 }
 
-const int MiniStyledTextCtrl::GetOurMarkerNumber()const
+const int MiniStyledTextCtrl::GetOurMarkerNumber()
 {
     return 8;
 }

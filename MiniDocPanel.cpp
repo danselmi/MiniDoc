@@ -39,6 +39,19 @@ void MiniDocPanel::UpdateConfig()
 {
     if(miniStc_)
         miniStc_->UpdateConfig();
+
+    EditorManager *edMan = Manager::Get()->GetEditorManager();
+    if(!edMan) return;
+    if(!Manager::Get()->GetConfigManager(_T("editor"))->ReadBool(_T("/mini_doc/show_designator"), false))
+    {
+        for(size_t i = 0 ; i < edMan->GetEditorsCount() ; ++i)
+        {
+            cbEditor *ed = edMan->GetBuiltinEditor(i);
+            if(!ed) continue;
+
+            MiniStyledTextCtrl::RemoveMarkers(ed->GetControl());
+        }
+    }
 }
 
 void MiniDocPanel::Update(cbEditor *ed)

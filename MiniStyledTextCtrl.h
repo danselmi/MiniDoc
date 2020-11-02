@@ -14,6 +14,7 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
         void UpdateMiniature(cbStyledTextCtrl *stc);
         void UpdateConfig();
         void Init();
+        static void RemoveMarkers(cbStyledTextCtrl *stc);
     private:
         void SetMarker();
         void DesignateVisibleRange(int from, int to);
@@ -30,7 +31,7 @@ class MiniStyledTextCtrl: public cbStyledTextCtrl
 
         int visibleFrom_, visibleLength_;
 
-        const int GetOurMarkerNumber()const;
+        static const int GetOurMarkerNumber();
 
         wxColor backgroundColour_;
         bool showDesignator_;
